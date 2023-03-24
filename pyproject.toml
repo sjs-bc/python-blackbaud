@@ -4,7 +4,7 @@ version = "0.1.0"
 description = ""
 authors = ["Ömer Boratav <oboratav@stjohns.bc.ca>"]
 readme = "README.md"
-packages = [{include = "blackbaud", from = "src"}]
+packages = [{include = "blackbaud"}]
 
 [tool.poetry.dependencies]
 python = "^3.9"
