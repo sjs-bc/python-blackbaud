@@ -31,3 +31,4 @@ MANIFEST
 .python-version
 
 prototyping/
+*.sqlite
