@@ -1,17 +1,36 @@
 class BlackbaudResource(object):
     ...
 
+
 class BlackbaudObject(BlackbaudResource):
     """
     Base class for any Blackbaud object, such as a constituent, a grade level, etc.
+
+    BlackbaudCollection > BlackbaudPage > BlackbaudObject
     """
+
     ...
+
 
 class BlackbaudPage(BlackbaudResource):
     """
     A page of results from any Blackbaud API endpoint.
+
+    BlackbaudCollection > BlackbaudPage > BlackbaudObject
     """
+
     ...
+
+
+class BlackbaudCollection(BlackbaudResource):
+    """
+    A collection of Blackbaud objects, split into pages.
+
+    BlackbaudCollection > BlackbaudPage > BlackbaudObject
+    """
+
+    ...
+
 
 class BlackbaudList(BlackbaudResource):
     """
@@ -30,4 +49,5 @@ class BlackbaudList(BlackbaudResource):
     Will have a .columns attribute which will list the columns.
     Will have a .results attribute which will be a generator that yields BlackbaudListItems.
     """
+
     ...
