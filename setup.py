@@ -14,5 +14,5 @@ setuptools.setup(
     url="https://github.com/sjs-bc/python-blackbaud",
     project_urls={"Bug Tracker": "https://github.com/sjs-bc/python-blackbaud/issues"},
     packages=["blackbaud"],
-    install_requires=["requests", "requests-oauthlib", "limits", "lxml"],
+    install_requires=["requests", "requests-oauthlib", "requests-cache[json,redis]", "limits", "lxml"],
 )

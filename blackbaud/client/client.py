@@ -2,8 +2,11 @@ import logging
 from typing import Optional, Literal, Any, Type
 
 import requests
-from requests_oauthlib import OAuth2Session
+from limits.strategies import RateLimiter, MovingWindowRateLimiter
+from limits.storage import MemoryStorage
 
+from blackbaud.client.session import CachedOAuth2Session
+from blackbaud.client.rate_limiters.default import STANDARD_TIER, DEFAULT_STORAGE
 from blackbaud.authentication.managers import MemoryCredentialManager
 from blackbaud.authentication.protocols import CredentialManager
 from blackbaud.authentication.settings import AUTHORIZATION_URL, TOKEN_URL
@@ -30,6 +33,10 @@ class SKYAPIClient:
         authorization_code: Optional[str] = None,
         authorization_response: Optional[str] = None,
         logger: Optional[logging.Logger] = _logger,
+        rate_limiter: Optional[RateLimiter] = MovingWindowRateLimiter(
+            storage=DEFAULT_STORAGE
+        ),
+        rate_limits: Optional[str] = STANDARD_TIER,
     ):
         """
         Construct a new SKY API Client object.
@@ -69,8 +76,10 @@ class SKYAPIClient:
         self._environment_id = environment_id
         self._scope = scope
         self.logger = logger
+        self._rate_limiter = rate_limiter
+        self._rate_limits = rate_limits
 
-        self._session = OAuth2Session(
+        self._session = CachedOAuth2Session(
             client_id=self._client_id,
             redirect_uri=self._redirect_uri,
             token=self._credential_manager.token,
@@ -89,7 +98,10 @@ class SKYAPIClient:
             environment_id=self._environment_id,
         )
         if self._credential_manager.token is not None:
-            self._session.refresh_token(TOKEN_URL)
+            self._session.refresh_token(
+                token_url=TOKEN_URL,
+                refresh_token=self._credential_manager.token["refresh_token"],
+            )
         elif authorization_code or authorization_response:
             self._session.fetch_token(
                 TOKEN_URL,
@@ -151,8 +163,20 @@ class SKYAPIClient:
             }
         )
 
+        # if this request is not cached, then we need to rate limit it
+        if not self._session.cache.contains(
+            request=requests.Request(method, url, headers=headers, data=data)
+        ):
+            for limit in self._rate_limits:
+                self._rate_limiter.hit(limit, self._subscription_key)
+
         return self._session.request(
-            method, url, data, headers, withhold_token, **kwargs
+            method,
+            url,
+            headers=headers,
+            data=data,
+            withhold_token=withhold_token,
+            **kwargs,
         )
 
     @property
@@ -190,7 +214,7 @@ class Endpoint:
     """
     A base class for SKY API Endpoints
     """
-    
+
     def __init__(self, client: Type["BaseSolutionClient"], data: dict):
         """
         Construct a new SKYEntity object.
@@ -202,7 +226,6 @@ class Endpoint:
         """
         self._client = client
         self._data = data
-
 
 
 class BaseSolutionClient:
@@ -252,7 +275,8 @@ class BaseSolutionClient:
         :return: The response from the SKY API.
         :rtype: dict
         """
-        response = self._client.request(http_verb, self.__make_url(path), data=data, **kwargs)
+        response = self._client.request(
+            http_verb, self.__make_url(path), data=data, **kwargs
+        )
 
         return response
-
