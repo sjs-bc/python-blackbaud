@@ -286,7 +286,7 @@ class BaseSolutionClient:
 
         return response
 
+
 def paginated_response(func):
     def wrapper(*args, **kwargs):
         func(*args, **kwargs)
-        
