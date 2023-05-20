@@ -1,5 +1,5 @@
 from requests_oauthlib import OAuth2Session
-from requests_cache import CacheMixin, RedisCache
+from requests_cache import CacheMixin
 
 
 class CachedOAuth2Session(CacheMixin, OAuth2Session):

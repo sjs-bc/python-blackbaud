@@ -2,6 +2,7 @@ import logging
 from typing import Optional, Literal, Any, Type
 
 import requests
+from requests_cache.backends import BackendSpecifier
 from limits.strategies import RateLimiter, MovingWindowRateLimiter
 from limits.storage import MemoryStorage
 
@@ -37,6 +38,8 @@ class SKYAPIClient:
             storage=DEFAULT_STORAGE
         ),
         rate_limits: Optional[str] = STANDARD_TIER,
+        cache_name: str = "blackbaud_cache",
+        cache_backend: Optional[BackendSpecifier] = None,
     ):
         """
         Construct a new SKY API Client object.
@@ -90,6 +93,8 @@ class SKYAPIClient:
                 "client_secret": self._client_secret,
             },
             token_updater=self._credential_manager.update_token,
+            cache_name=cache_name,
+            cache_backend=cache_backend,
         )
         self._state = str(self._session.new_state())
         self._authorization_url, _ = self._session.authorization_url(
