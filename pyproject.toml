@@ -1,7 +1,7 @@
 [tool.poetry]
 name = "blackbaud"
 version = "0.1.0"
-description = ""
+description = "A python module to make the SKY API easier to work with"
 authors = ["Ömer Boratav <oboratav@stjohns.bc.ca>"]
 readme = "README.md"
 packages = [{include = "blackbaud"}]
@@ -16,6 +16,7 @@ requests-cache = {extras = ["json", "redis"], version = "^1.0.1"}
 
 [tool.poetry.group.dev.dependencies]
 pytest = "^7.2.0"
+pre-commit = "^3.3.2"
 sphinx = "^5.3.0"
 sphinx-rtd-theme = "^1.1.1"
 sphinx-autodoc-typehints = "^1.19.5"
