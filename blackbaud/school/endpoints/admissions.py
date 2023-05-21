@@ -21,8 +21,8 @@ def get_candidates(
         "admissions/candidates",
         params={
             "school_year": school_year,
-            "status_ids": ",".join(map(str, status_ids)),
-            "modified_date": modified_date.isoformat(),
+            "status_ids": ",".join(map(str, status_ids)) if status_ids else None,
+            "modified_date": modified_date.isoformat() if modified_date else None,
         },
     )
 
