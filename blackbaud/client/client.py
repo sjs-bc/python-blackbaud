@@ -1,18 +1,18 @@
 import logging
-from typing import Optional, Literal, Any, Type
+from datetime import datetime, timedelta
+from typing import Any, Iterable, Literal, Optional, Type, Union
 
 import requests
-from datetime import timedelta
+from limits.storage import MemoryStorage
+from limits.strategies import MovingWindowRateLimiter, RateLimiter
 from requests_cache.backends import BackendSpecifier
 from requests_cache.policy import ExpirationTime
-from limits.strategies import RateLimiter, MovingWindowRateLimiter
-from limits.storage import MemoryStorage
 
-from blackbaud.client.session import CachedOAuth2Session
-from blackbaud.client.rate_limiters.default import STANDARD_TIER, DEFAULT_STORAGE
 from blackbaud.authentication.managers import MemoryCredentialManager
 from blackbaud.authentication.protocols import CredentialManager
 from blackbaud.authentication.settings import AUTHORIZATION_URL, TOKEN_URL
+from blackbaud.client.rate_limiters.default import DEFAULT_STORAGE, STANDARD_TIER
+from blackbaud.client.session import CachedOAuth2Session
 from blackbaud.client.settings import BASE_URL
 
 _logger = logging.getLogger(__name__)
@@ -36,13 +36,13 @@ class SKYAPIClient:
         authorization_code: Optional[str] = None,
         authorization_response: Optional[str] = None,
         logger: Optional[logging.Logger] = _logger,
-        rate_limiter: Optional[RateLimiter] = MovingWindowRateLimiter(
-            storage=DEFAULT_STORAGE
-        ),
-        rate_limits: Optional[str] = STANDARD_TIER,
+        rate_limiter: RateLimiter = MovingWindowRateLimiter(storage=DEFAULT_STORAGE),
+        rate_limits: Iterable = STANDARD_TIER,
         cache_name: str = "blackbaud_cache",
         cache_backend: Optional[BackendSpecifier] = None,
-        cache_default_expiry: ExpirationTime = timedelta(hours=1),
+        cache_default_expiry: Union[int, float, str, datetime, timedelta] = timedelta(
+            hours=1
+        ),
     ):
         """
         Construct a new SKY API Client object.
