@@ -8,7 +8,7 @@ from blackbaud.client import BaseSolutionClient
 
 def get_attendance_records(
     school: BaseSolutionClient,
-    level_id: int,
+    school_level_id: int,
     date: datetime,
     offering_type: int,
     excuse_type: Optional[int] = None,
@@ -22,7 +22,7 @@ def get_attendance_records(
         "GET",
         "attendance",
         params={
-            "level_id": level_id,
+            "level_id": school_level_id,
             "day": date.isoformat(),
             "offering_type": offering_type,
             "excuse_type": excuse_type,

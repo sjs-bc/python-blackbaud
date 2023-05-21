@@ -7,7 +7,7 @@ from blackbaud.client import BaseSolutionClient
 
 def get_sections_by_level(
     school: BaseSolutionClient,
-    level_id: int,
+    school_level_id: int,
     school_year: Optional[str] = None,
     **request_kwargs,
 ) -> Response:
@@ -18,6 +18,6 @@ def get_sections_by_level(
     return school._make_request(
         "GET",
         "advisories/sections",
-        params={"level_num": level_id, "school_year": school_year},
+        params={"level_num": school_level_id, "school_year": school_year},
         **request_kwargs,
     )

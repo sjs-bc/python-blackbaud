@@ -47,7 +47,7 @@ def get_school_levels(school: BaseSolutionClient, **request_kwargs) -> Response:
 
 def get_sessions(
     school: BaseSolutionClient,
-    level_id: Optional[int] = None,
+    school_level_id: Optional[int] = None,
     school_year: Optional[str] = None,
     **request_kwargs,
 ) -> Response:
@@ -59,7 +59,7 @@ def get_sessions(
         "GET",
         "sessions",
         params={
-            "level_num": level_id,
+            "level_num": school_level_id,
             "school_year": school_year,
         },
         **request_kwargs,
@@ -161,3 +161,10 @@ def search_directory(
         },
         **request_kwargs,
     )
+
+
+def get_buildings(school: BaseSolutionClient, **request_kwargs) -> Response:
+    """
+    Returns a collection of school buildings.
+    """
+    return school._make_request("GET", "venues/buildings", **request_kwargs)
