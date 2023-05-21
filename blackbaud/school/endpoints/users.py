@@ -56,7 +56,8 @@ def audit_users_by_role(
     end_date: Optional[datetime] = None,
 ) -> Response:
     """
-    Returns a collection of audit information based on the specified role_id within the dates provided.
+    Returns a collection of audit information based on the specified role_id within the
+    dates provided.
     https://developer.sky.blackbaud.com/docs/services/school/operations/V1UsersAuditGet
     """
     return school._make_request(
@@ -76,8 +77,9 @@ def get_changed_users_by_roles(
     start_date: Optional[datetime] = None,
 ) -> Response:
     """
-    Returns a paginated collection of users whose data has been modified within the specified timeframe.
-    The timeframe is from the start_date to the start_date plus seven days.
+    Returns a paginated collection of users whose data has been modified within the
+    specified timeframe. The timeframe is from the start_date to the start_date plus
+    seven days.
     https://developer.sky.blackbaud.com/docs/services/school/operations/V1UsersChangedGet
     """
     return school._make_request(

@@ -175,10 +175,7 @@ def get_master_schedule(
     )
 
 
-def get_schedule_set(
-    school: BaseSolutionClient,
-    schedule_set_id: int
-) -> Response:
+def get_schedule_set(school: BaseSolutionClient, schedule_set_id: int) -> Response:
     """
     Returns details about the schedule set specified.
     https://developer.sky.blackbaud.com/docs/services/school/operations/V1AcademicsSchedulesSetsBySchedule_set_idGet
@@ -291,9 +288,10 @@ def get_enrollment_changes(
     end_date: Optional[datetime] = None,
 ) -> Response:
     """
-    Returns a collection of students with enrollment changes on or after the date parameter.
-    The maximum period of time that can be specified is 30 days from start_date, if end_date
-    is not provided or is greater than 30 days from start_date it will be set to start_date + 30 days.
+    Returns a collection of students with enrollment changes on or after the date
+    parameter. The maximum period of time that can be specified is 30 days from
+    start_date, if end_date is not provided or is greater than 30 days from start_date
+    it will be set to start_date + 30 days.
     https://developer.sky.blackbaud.com/docs/services/school/operations/V1AcademicsEnrollmentsChangesGet
     """
     return school._make_request(

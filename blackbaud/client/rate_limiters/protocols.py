@@ -1,11 +1,15 @@
 from abc import abstractmethod
-from typing import Protocol, Optional, Any
+from typing import Any, Protocol
+
 
 class RateLimiter(Protocol):
     """
-    A protocol for rate limiter adapters. Based entirely on the `limits library <https://github.com/alisaifee/limits>`, 
-    as that's the library we will be using, but having this protocol allows anyone to swap it out for another library.
+    A protocol for rate limiter adapters. Based entirely on the
+    `limits library <https://github.com/alisaifee/limits>`, as that's the library we
+    will be using, but having this protocol allows anyone to swap it out for another
+    library.
     """
+
     @abstractmethod
     def __init__(self, subscription_key: str, rate_limit: Any):
         """
@@ -18,12 +22,12 @@ class RateLimiter(Protocol):
 
         :param subscription_key: The Blackbaud subscription key.
         :type subscription_key: str
-        :param rate_limit: Some description of the rate limit which will be interpreted 
+        :param rate_limit: Some description of the rate limit which will be interpreted
         by the implementation of the class to send out or delay requests.
         :type rate_limit: Any
         """
         ...
-    
+
     @abstractmethod
     def hit(self, cost: int = 1) -> None:
         """
@@ -34,7 +38,7 @@ class RateLimiter(Protocol):
         :type cost: int
         """
         ...
-    
+
     @abstractmethod
     def test(self, cost: int = 1) -> bool:
         """
@@ -44,4 +48,3 @@ class RateLimiter(Protocol):
         :type cost: int
         """
         ...
-

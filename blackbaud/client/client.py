@@ -3,10 +3,9 @@ from datetime import datetime, timedelta
 from typing import Any, Iterable, Literal, Optional, Type, Union
 
 import requests
-from limits.storage import MemoryStorage
+from limits import RateLimitItem
 from limits.strategies import MovingWindowRateLimiter, RateLimiter
 from requests_cache.backends import BackendSpecifier
-from requests_cache.policy import ExpirationTime
 
 from blackbaud.authentication.managers import MemoryCredentialManager
 from blackbaud.authentication.protocols import CredentialManager
@@ -37,7 +36,7 @@ class SKYAPIClient:
         authorization_response: Optional[str] = None,
         logger: Optional[logging.Logger] = _logger,
         rate_limiter: RateLimiter = MovingWindowRateLimiter(storage=DEFAULT_STORAGE),
-        rate_limits: Iterable = STANDARD_TIER,
+        rate_limits: Iterable[RateLimitItem] = STANDARD_TIER,
         cache_name: str = "blackbaud_cache",
         cache_backend: Optional[BackendSpecifier] = None,
         cache_default_expiry: Union[int, float, str, datetime, timedelta] = timedelta(

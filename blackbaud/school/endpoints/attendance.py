@@ -49,8 +49,12 @@ def create_attendance_record(
             "student_user_id": user_id,
             "begin_date": start_date.isoformat(),
             "end_date": end_date.isoformat() if end_date else None,
-            "start_time": start_date.time().isoformat("seconds") if specify_time else None,
-            "end_time": end_date.time().isoformat("seconds") if (specify_time and end_date) else None,
+            "start_time": start_date.time().isoformat("seconds")
+            if specify_time
+            else None,
+            "end_time": end_date.time().isoformat("seconds")
+            if (specify_time and end_date)
+            else None,
             "excuse_type_id": excuse_type,
             "excuse_comment": excuse_comment,
         },

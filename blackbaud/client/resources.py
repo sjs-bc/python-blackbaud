@@ -47,7 +47,8 @@ class BlackbaudList(BlackbaudResource):
     }
     If any part of the list is ever fetched, its columns attribute will be populated.
     Will have a .columns attribute which will list the columns.
-    Will have a .results attribute which will be a generator that yields BlackbaudListItems.
+    Will have a .results attribute which will be a generator that yields
+    BlackbaudListItems.
     """
 
     ...
