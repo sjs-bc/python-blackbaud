@@ -1,12 +1,12 @@
 from datetime import datetime
-from typing import List, Optional, Literal
+from typing import Iterable, Optional, Literal
 from blackbaud.client import BaseSolutionClient
 
 
 def get_assignments_by_section(
     school: BaseSolutionClient,
     section_id: int,
-    types: Optional[List[str]] = None,
+    types: Optional[Iterable[str]] = None,
     status: Optional[str] = None,
     persona_id: Optional[Literal["2", 2, "3", 3]] = None,
     filter: Optional[Literal["expired", "future", "all"]] = "all",
@@ -34,7 +34,7 @@ def get_assignments_by_student(
     student_id: int,
     start_date: datetime,
     end_date: Optional[datetime] = None,
-    section_ids: Optional[List[int]] = None,
+    section_ids: Optional[Iterable[int]] = None,
 ):
     """
     Gets a collection of assignments for a given student.
@@ -111,8 +111,8 @@ def enroll_students_into_sections(
     school: BaseSolutionClient,
     duration_id: int,
     enrollment_date: datetime,
-    section_ids: List[int],
-    user_ids: List[int],
+    section_ids: Iterable[int],
+    user_ids: Iterable[int],
 ):
     """
     Adds bulk enrollment data (students and/or teachers) for the specified section(s).

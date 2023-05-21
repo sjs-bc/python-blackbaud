@@ -1,12 +1,12 @@
 from datetime import datetime
-from typing import List, Optional
+from typing import Iterable, Optional
 from blackbaud.client import BaseSolutionClient
 
 
 def get_candidates(
     school: BaseSolutionClient,
     school_year: Optional[str] = None,
-    status_ids: Optional[List[int]] = None,
+    status_ids: Optional[Iterable[int]] = None,
     modified_date: Optional[datetime] = None,
 ):
     """
