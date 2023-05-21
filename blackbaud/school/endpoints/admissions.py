@@ -11,6 +11,7 @@ def get_candidates(
     school_year: Optional[str] = None,
     status_ids: Optional[Iterable[int]] = None,
     modified_date: Optional[datetime] = None,
+    **request_kwargs,
 ) -> Response:
     """
     Returns a collection of admissions candidates.
@@ -24,23 +25,26 @@ def get_candidates(
             "status_ids": ",".join(map(str, status_ids)) if status_ids else None,
             "modified_date": modified_date.isoformat() if modified_date else None,
         },
+        **request_kwargs,
     )
 
 
 def get_checklist_statuses(
     school: BaseSolutionClient,
+    **request_kwargs,
 ) -> Response:
     """
     Returns a collection of admissions checklist statuses.
     https://developer.sky.blackbaud.com/docs/services/school/operations/V1AdmissionsCheckliststatusGet
     """
-    return school._make_request("GET", "admissions/checkliststatus")
+    return school._make_request("GET", "admissions/checkliststatus", **request_kwargs)
 
 
 def get_checklists(
     school: BaseSolutionClient,
     search: Optional[str] = None,
     inactive_only: Optional[bool] = False,
+    **request_kwargs,
 ) -> Response:
     """
     Returns a collection of admissions checklists.
@@ -53,14 +57,16 @@ def get_checklists(
             "search_text": search,
             "inactive_only": inactive_only,
         },
+        **request_kwargs,
     )
 
 
 def get_admissions_statuses(
     school: BaseSolutionClient,
+    **request_kwargs,
 ) -> Response:
     """
     Returns a collection of admissions statuses.
     https://developer.sky.blackbaud.com/docs/services/school/operations/V1AdmissionsStatusGet
     """
-    return school._make_request("GET", "admissions/status")
+    return school._make_request("GET", "admissions/status", **request_kwargs)

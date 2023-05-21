@@ -9,6 +9,7 @@ def get_activity_sections_by_level(
     school: BaseSolutionClient,
     level_id: int,
     school_year: Optional[str] = None,
+    **request_kwargs,
 ) -> Response:
     """
     Returns a collection of activity sections for the specified school level.
@@ -21,4 +22,5 @@ def get_activity_sections_by_level(
             "level_num": level_id,
             "school_year": school_year,
         },
+        **request_kwargs,
     )

@@ -9,6 +9,7 @@ def get_sections_by_level(
     school: BaseSolutionClient,
     level_id: int,
     school_year: Optional[str] = None,
+    **request_kwargs,
 ) -> Response:
     """
     Returns a list of advisory sections for the specified school level.
@@ -18,4 +19,5 @@ def get_sections_by_level(
         "GET",
         "advisories/sections",
         params={"level_num": level_id, "school_year": school_year},
+        **request_kwargs,
     )

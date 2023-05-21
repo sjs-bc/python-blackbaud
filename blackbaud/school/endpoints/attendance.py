@@ -12,6 +12,7 @@ def get_attendance_records(
     date: datetime,
     offering_type: int,
     excuse_type: Optional[int] = None,
+    **request_kwargs,
 ) -> Response:
     """
     Returns a collection of student attendance records for the specified day.
@@ -26,6 +27,7 @@ def get_attendance_records(
             "offering_type": offering_type,
             "excuse_type": excuse_type,
         },
+        **request_kwargs,
     )
 
 
@@ -37,6 +39,7 @@ def create_attendance_record(
     specify_time: Optional[bool] = False,
     excuse_type: Optional[int] = None,
     excuse_comment: Optional[str] = None,
+    **request_kwargs,
 ) -> Response:
     """
     Creates a new attendance record for the specified student.
@@ -58,28 +61,29 @@ def create_attendance_record(
             "excuse_type_id": excuse_type,
             "excuse_comment": excuse_comment,
         },
+        **request_kwargs,
     )
 
 
-def get_attendance_types(school: BaseSolutionClient) -> Response:
+def get_attendance_types(school: BaseSolutionClient, **request_kwargs) -> Response:
     """
     Returns a list of attendance types.
     https://developer.sky.blackbaud.com/docs/services/school/operations/V1TypesAttendancetypesGet
     """
-    return school._make_request("GET", "types/attendancetypes")
+    return school._make_request("GET", "types/attendancetypes", **request_kwargs)
 
 
-def get_excuse_types(school: BaseSolutionClient) -> Response:
+def get_excuse_types(school: BaseSolutionClient, **request_kwargs) -> Response:
     """
     Returns a list of excuse types.
     https://developer.sky.blackbaud.com/docs/services/school/operations/V1TypesExcusedtypesGet
     """
-    return school._make_request("GET", "types/excusedtypes")
+    return school._make_request("GET", "types/excusedtypes", **request_kwargs)
 
 
-def get_excuse_duration_types(school: BaseSolutionClient) -> Response:
+def get_excuse_duration_types(school: BaseSolutionClient, **request_kwargs) -> Response:
     """
     Returns a list of excuse duration types.
     https://developer.sky.blackbaud.com/docs/services/school/operations/V1TypesExcusedurationtypesGet
     """
-    return school._make_request("GET", "types/excusedurationtypes")
+    return school._make_request("GET", "types/excusedurationtypes", **request_kwargs)
