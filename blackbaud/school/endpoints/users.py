@@ -8,6 +8,17 @@ from requests import Response
 from blackbaud.client import BaseSolutionClient
 
 
+def get_self(
+    school: BaseSolutionClient,
+    **request_kwargs,
+) -> Response:
+    """
+    Returns information about the caller.
+    https://developer.sky.blackbaud.com/docs/services/school/operations/V1UsersMeGet
+    """
+    return school._make_request("GET", "users/me", **request_kwargs)
+
+
 def get_user_by_id(
     school: BaseSolutionClient,
     user_id: int,
@@ -18,6 +29,18 @@ def get_user_by_id(
     https://developer.sky.blackbaud.com/docs/services/school/operations/V1UsersByUser_idGet
     """
     return school._make_request("GET", f"users/{user_id}", **request_kwargs)
+
+
+def get_user_by_id_details(
+    school: BaseSolutionClient,
+    user_id: int,
+    **request_kwargs,
+) -> Response:
+    """
+    Returns a user by ID, with extended details.
+    https://developer.sky.blackbaud.com/docs/services/school/operations/V1UsersExtendedByUser_idGet
+    """
+    return school._make_request("GET", f"users/extended/{user_id}", **request_kwargs)
 
 
 def get_users_by_roles(
@@ -49,6 +72,24 @@ def get_users_by_roles(
             "end_grad_year": end_grad_year,
             "marker": marker,
         },
+        **request_kwargs,
+    )
+
+
+def get_users_by_roles_detailed(
+    school: BaseSolutionClient,
+    role_ids: Iterable[int],
+    marker: Optional[int] = None,
+    **request_kwargs,
+) -> Response:
+    """
+    Returns a paginated collection of extended user details, limited to 1000 users per
+    page. Use the last user's ID as the marker value to return the next set of results.
+    """
+    return school._make_request(
+        "GET",
+        "users/extended",
+        params={"base_role_ids": ",".join(map(str, role_ids)), "marker": marker},
         **request_kwargs,
     )
 
@@ -592,7 +633,9 @@ def get_user_emergency_contacts(
     Returns a collection of emergency contacts for the specified user.
     https://developer.sky.blackbaud.com/docs/services/school/operations/V1UsersByUser_idEmergencycontactsGet
     """
-    return school._make_request("GET", f"users/{user_id}/emergencycontacts", **request_kwargs)
+    return school._make_request(
+        "GET", f"users/{user_id}/emergencycontacts", **request_kwargs
+    )
 
 
 def get_user_employment(
@@ -605,3 +648,310 @@ def get_user_employment(
     https://developer.sky.blackbaud.com/docs/services/school/operations/V1UsersByUser_idEmploymentGet
     """
     return school._make_request("GET", f"users/{user_id}/employment", **request_kwargs)
+
+
+def create_user_enrollment(
+    school: BaseSolutionClient,
+    user_id: int,
+    grade_level_id: int,
+    enrollment_date: datetime,
+    school_level_id: Optional[int] = None,
+    school_year: Optional[str] = None,
+    departure_date: Optional[datetime] = None,
+    current_year: Optional[bool] = None,
+    has_grades: Optional[bool] = None,
+    grade_repeated: Optional[bool] = None,
+    graduated: Optional[bool] = None,
+    allow_edit: Optional[bool] = None,
+    allow_delete: Optional[bool] = None,
+    future_enrollments: Optional[bool] = None,
+    duration_id: Optional[int] = None,
+    session_id: Optional[int] = None,
+    role_ids: Optional[Iterable[int]] = None,
+    **request_kwargs,
+) -> Response:
+    """
+    TODO: Check if the optional parameters are actually optional
+    Creates an enrollment for the given user.
+    https://developer.sky.blackbaud.com/docs/services/school/operations/V1UsersByUser_idEnrollmentsPost
+    """
+    return school._make_request(
+        "POST",
+        "users/enroll",
+        data={
+            "user_id": user_id,
+            "grade_level_id": grade_level_id,
+            "school_level_id": school_level_id,
+            "school_year_label": school_year,
+            "enroll_date": enrollment_date.date().isoformat()
+            if enrollment_date
+            else None,
+            "depart_date": departure_date.date().isoformat()
+            if departure_date
+            else None,
+            "current_year": current_year,
+            "has_grades": has_grades,
+            "grade_repeated": grade_repeated,
+            "graduated": graduated,
+            "allow_edit": allow_edit,
+            "allow_delete": allow_delete,
+            "future_enrollments": future_enrollments,
+            "duration_id": duration_id,
+            "session_id": session_id,
+            "role_ids": role_ids,
+        },
+        **request_kwargs,
+    )
+
+
+def get_user_enrollments_by_year(
+    school: BaseSolutionClient,
+    school_year: str,
+    school_level_id: Optional[int] = None,
+    grade_level_id: Optional[int] = None,
+    limit: Optional[int] = None,
+    offset: Optional[int] = None,
+    **request_kwargs,
+) -> Response:
+    """
+    Returns a collection of enrollments for the specified user.
+    https://developer.sky.blackbaud.com/docs/services/school/operations/V1UsersByUser_idEnrollmentsGet
+    """
+    return school._make_request(
+        "GET",
+        "users/enrollments",
+        params={
+            "school_year": school_year,
+            "school_level_id": school_level_id,
+            "grade_level_id": grade_level_id,
+            "limit": limit,
+            "offset": offset,
+        },
+        **request_kwargs,
+    )
+
+
+def get_gender_types(
+    school: BaseSolutionClient,
+    **request_kwargs,
+) -> Response:
+    """
+    Returns a collection of gender types.
+    https://developer.sky.blackbaud.com/docs/services/school/operations/V1UsersGendertypesGet
+    """
+    return school._make_request("GET", "users/gendertypes", **request_kwargs)
+
+
+def get_user_occupations(
+    school: BaseSolutionClient,
+    user_id: int,
+    **request_kwargs,
+) -> Response:
+    """
+    Returns a collection of occupations for the specified user.
+    https://developer.sky.blackbaud.com/docs/services/school/operations/V1UsersByUser_idOccupationsGet
+    """
+    return school._make_request("GET", f"users/{user_id}/occupations", **request_kwargs)
+
+
+def create_user_occupation(
+    school: BaseSolutionClient,
+    user_id: int,
+    business_name: Optional[str] = None,
+    job_title: Optional[str] = None,
+    business_url: Optional[str] = None,
+    industry: Optional[str] = None,
+    organization: Optional[str] = None,
+    occupation: Optional[str] = None,
+    matching_gift: Optional[bool] = None,
+    start_date: Optional[datetime] = None,
+    end_date: Optional[datetime] = None,
+    specialty: Optional[str] = None,
+    parent_company: Optional[str] = None,
+    job_function: Optional[str] = None,
+    years_employed: Optional[int] = None,
+    current: Optional[bool] = None,
+    **request_kwargs,
+) -> Response:
+    """
+    Creates an occupation for the given user.
+    https://developer.sky.blackbaud.com/docs/services/school/operations/V1UsersByUser_idOccupationsPost
+    """
+    return school._make_request(
+        "POST",
+        f"users/{user_id}/occupations",
+        data={
+            "business_name": business_name,
+            "job_title": job_title,
+            "business_url": business_url,
+            "industry": industry,
+            "organization": organization,
+            "occupation": occupation,
+            "matching_gift": matching_gift,
+            "begin_date": start_date.date().isoformat() if start_date else None,
+            "end_date": end_date.date().isoformat() if end_date else None,
+            "specialty": specialty,
+            "parent_company": parent_company,
+            "job_function": job_function,
+            "years_employed": years_employed,
+            "current": current,
+        },
+        **request_kwargs,
+    )
+
+
+def get_phone_types(
+    school: BaseSolutionClient,
+    **request_kwargs,
+) -> Response:
+    """
+    Returns a collection of phone types.
+    https://developer.sky.blackbaud.com/docs/services/school/operations/V1UsersPhonetypesGet
+    """
+    return school._make_request("GET", "users/phonetypes", **request_kwargs)
+
+
+def get_user_phones(
+    school: BaseSolutionClient,
+    user_id: int,
+    **request_kwargs,
+) -> Response:
+    """
+    Returns a collection of phones for the specified user.
+    https://developer.sky.blackbaud.com/docs/services/school/operations/V1UsersByUser_idPhonesGet
+    """
+    return school._make_request("GET", f"users/{user_id}/phones", **request_kwargs)
+
+
+def create_user_phone(
+    school: BaseSolutionClient,
+    user_id: int,
+    phone_type_id: int,
+    phone_number: str,
+    **request_kwargs,
+) -> Response:
+    """
+    Creates a phone for the given user.
+    https://developer.sky.blackbaud.com/docs/services/school/operations/V1UsersByUser_idPhonesPost
+    """
+    return school._make_request(
+        "POST",
+        f"users/{user_id}/phones",
+        data={
+            "phone_type_id": phone_type_id,
+            "phone_number": phone_number,
+        },
+        **request_kwargs,
+    )
+
+
+def get_user_relationships(
+    school: BaseSolutionClient,
+    user_id: int,
+    **request_kwargs,
+) -> Response:
+    """
+    Returns a collection of relationships for the specified user.
+    https://developer.sky.blackbaud.com/docs/services/school/operations/V1UsersByUser_idRelationshipsGet
+    """
+    return school._make_request(
+        "GET", f"users/{user_id}/relationships", **request_kwargs
+    )
+
+
+class RelationshipType(Enum):
+    """
+    Enum for relationship types.
+    """
+
+    NOT_SET = "NOT_SET"
+
+    FRIEND = "Friend_Friend"
+    ASSOCIATE = "Associate_Associate"
+    CONSULTANT = "Consultant_Student"
+
+    CUSTODIAN = "Custodian_Student"
+    GUARDIAN = "Guardian_Ward"
+    CARETAKER = "Caretaker_Charge"
+
+    AUNT = "AuntUncle_NieceNephew"
+    UNCLE = "AuntUncle_NieceNephew"
+    COUSIN = "Cousin_Cousin"
+
+    SPOUSE = "Spouse_Spouse"
+    SPOUSE_PARTNER = "SpousePartner_SpousePartner"
+    HUSBAND = "Husband_Wife"
+    WIFE = "Husband_Wife"
+    EX_SPOUSE = "ExHusband_ExWife"
+    EX_HUSBAND = "ExHusband_ExWife"
+    EX_WIFE = "ExHusband_ExWife"
+
+    STEP_PARENT = "StepParent_StepChild"
+    STEP_FATHER = "StepParent_StepChild"
+    STEP_MOTHER = "StepParent_StepChild"
+    STEP_SIBLING = "StepSibling_StepSibling"
+    STEP_BROTHER = "StepSibling_StepSibling"
+    STEP_SISTER = "StepSibling_StepSibling"
+    HALF_SIBLING = "HalfSibling_HalfSibling"
+    HALF_BROTHER = "HalfSibling_HalfSibling"
+    HALF_SISTER = "HalfSibling_HalfSibling"
+
+    GRANDPARENT = "Grandparent_Grandchild"
+    GRANDFATHER = "Grandparent_Grandchild"
+    GRANDMOTHER = "Grandparent_Grandchild"
+
+    GREAT_GRANDPARENT = "GrGrandParent_GrGrandChild"
+    GREAT_GRANDFATHER = "GrGrandParent_GrGrandChild"
+    GREAT_GRANDMOTHER = "GrGrandParent_GrGrandChild"
+
+
+def create_user_relationship(
+    school: BaseSolutionClient,
+    related_user_id: int,
+    relationship_type: RelationshipType,
+    user_id: int,
+    list_as_parent: Optional[bool] = None,
+    give_parental_access: Optional[bool] = None,
+    tuition_responsible_signer: Optional[bool] = None,
+    **request_kwargs,
+) -> Response:
+    """
+    Creates a relationship record for the specified user.
+    "[related_user_id] is a/the [relationship_type] of [user_id]"
+    (ie. the related_user is on the LEFT side of the relationship)
+    https://developer.sky.blackbaud.com/docs/services/school/operations/V1UsersByUser_idRelationshipsPost
+    """
+    return school._make_request(
+        "POST",
+        f"users/{user_id}/relationships",
+        data={
+            "relationship_type": relationship_type.value,
+            "give_parental_access": give_parental_access,
+            "list_as_parent": list_as_parent,
+            "tuition_responsible_signer": tuition_responsible_signer,
+            "left_user": related_user_id,
+        },
+        **request_kwargs,
+    )
+
+
+def delete_user_relationship(
+    school: BaseSolutionClient,
+    related_user_id: int,
+    relationship_type: RelationshipType,
+    user_id: int,
+    **request_kwargs,
+) -> Response:
+    """
+    Deletes the specified relationship record for the specified user.
+    https://developer.sky.blackbaud.com/docs/services/school/operations/V1UsersByUser_idRelationshipsByRelationship_idDelete
+    """
+    return school._make_request(
+        "DELETE",
+        f"users/{user_id}/relationships/",
+        params={
+            "left_user": related_user_id,
+            "relationship_type": relationship_type.value,
+        },
+        **request_kwargs,
+    )
