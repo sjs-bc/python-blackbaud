@@ -1,5 +1,8 @@
 from datetime import datetime
 from typing import Optional
+
+from requests import Response
+
 from blackbaud.client import BaseSolutionClient
 
 
@@ -7,7 +10,7 @@ def get_calendar_for_self(
     school: BaseSolutionClient,
     start_date: Optional[datetime] = None,
     end_date: Optional[datetime] = None,
-):
+) -> Response:
     """
     Returns a list of events for the calling user.
     https://developer.sky.blackbaud.com/docs/services/school/operations/V1EventsCalendarGet
@@ -24,7 +27,7 @@ def get_calendar_for_self(
 
 def get_categories(
     school: BaseSolutionClient,
-):
+) -> Response:
     """
     Returns a collection of event categories.
     https://developer.sky.blackbaud.com/docs/services/school/operations/V1EventsCategoriesGet

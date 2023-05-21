@@ -1,5 +1,8 @@
 from datetime import datetime
 from typing import Optional
+
+from requests import Response
+
 from blackbaud.client import BaseSolutionClient
 
 
@@ -9,7 +12,7 @@ def get_attendance_records(
     date: datetime,
     offering_type: int,
     excuse_type: Optional[int] = None,
-):
+) -> Response:
     """
     Returns a collection of student attendance records for the specified day.
     https://developer.sky.blackbaud.com/docs/services/school/operations/V1AttendanceGet
@@ -34,7 +37,7 @@ def create_attendance_record(
     specify_time: Optional[bool] = False,
     excuse_type: Optional[int] = None,
     excuse_comment: Optional[str] = None,
-):
+) -> Response:
     """
     Creates a new attendance record for the specified student.
     https://developer.sky.blackbaud.com/docs/services/school/operations/V1AttendancePost
@@ -54,3 +57,27 @@ def create_attendance_record(
             "excuse_comment": excuse_comment,
         },
     )
+
+
+def get_attendance_types(school: BaseSolutionClient) -> Response:
+    """
+    Returns a list of attendance types.
+    https://developer.sky.blackbaud.com/docs/services/school/operations/V1TypesAttendancetypesGet
+    """
+    return school._make_request("GET", "types/attendancetypes")
+
+
+def get_excuse_types(school: BaseSolutionClient) -> Response:
+    """
+    Returns a list of excuse types.
+    https://developer.sky.blackbaud.com/docs/services/school/operations/V1TypesExcusedtypesGet
+    """
+    return school._make_request("GET", "types/excusedtypes")
+
+
+def get_excuse_duration_types(school: BaseSolutionClient) -> Response:
+    """
+    Returns a list of excuse duration types.
+    https://developer.sky.blackbaud.com/docs/services/school/operations/V1TypesExcusedurationtypesGet
+    """
+    return school._make_request("GET", "types/excusedurationtypes")

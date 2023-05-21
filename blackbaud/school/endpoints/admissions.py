@@ -1,5 +1,8 @@
 from datetime import datetime
 from typing import Iterable, Optional
+
+from requests import Response
+
 from blackbaud.client import BaseSolutionClient
 
 
@@ -8,7 +11,7 @@ def get_candidates(
     school_year: Optional[str] = None,
     status_ids: Optional[Iterable[int]] = None,
     modified_date: Optional[datetime] = None,
-):
+) -> Response:
     """
     Returns a collection of admissions candidates.
     https://developer.sky.blackbaud.com/docs/services/school/operations/V1AdmissionsCandidatesGet
@@ -26,7 +29,7 @@ def get_candidates(
 
 def get_checklist_statuses(
     school: BaseSolutionClient,
-):
+) -> Response:
     """
     Returns a collection of admissions checklist statuses.
     https://developer.sky.blackbaud.com/docs/services/school/operations/V1AdmissionsCheckliststatusGet
@@ -38,7 +41,7 @@ def get_checklists(
     school: BaseSolutionClient,
     search: Optional[str] = None,
     inactive_only: Optional[bool] = False,
-):
+) -> Response:
     """
     Returns a collection of admissions checklists.
     https://developer.sky.blackbaud.com/docs/services/school/operations/V1AdmissionsChecklistsGet
@@ -55,7 +58,7 @@ def get_checklists(
 
 def get_admissions_statuses(
     school: BaseSolutionClient,
-):
+) -> Response:
     """
     Returns a collection of admissions statuses.
     https://developer.sky.blackbaud.com/docs/services/school/operations/V1AdmissionsStatusGet

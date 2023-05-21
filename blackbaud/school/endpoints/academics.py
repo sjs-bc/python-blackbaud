@@ -1,5 +1,8 @@
 from datetime import datetime
-from typing import Iterable, Optional, Literal
+from typing import Iterable, Literal, Optional
+
+from requests import Response
+
 from blackbaud.client import BaseSolutionClient
 
 
@@ -11,7 +14,7 @@ def get_assignments_by_section(
     persona_id: Optional[Literal["2", 2, "3", 3]] = None,
     filter: Optional[Literal["expired", "future", "all"]] = "all",
     search: Optional[str] = None,
-):
+) -> Response:
     """
     Gets a collection of assignments for a given section.
     https://developer.sky.blackbaud.com/docs/services/school/operations/V1AcademicsSectionsBySection_idAssignmentsGet
@@ -35,7 +38,7 @@ def get_assignments_by_student(
     start_date: datetime,
     end_date: Optional[datetime] = None,
     section_ids: Optional[Iterable[int]] = None,
-):
+) -> Response:
     """
     Gets a collection of assignments for a given student.
     https://developer.sky.blackbaud.com/docs/services/school/operations/V1AcademicsByStudent_idAssignmentsGet
@@ -55,7 +58,7 @@ def get_courses(
     school: BaseSolutionClient,
     department_id: Optional[int] = None,
     level_id: Optional[int] = None,
-):
+) -> Response:
     """
     Gets a collection of academic courses, filtered by department and/or school level.
     https://developer.sky.blackbaud.com/docs/services/school/operations/V1AcademicsCoursesGet
@@ -75,7 +78,7 @@ def get_cycles_by_section(
     section_id: int,
     duration_id: Optional[int] = None,
     group_type: Optional[int] = None,
-):
+) -> Response:
     """
     Gets a collection of cycles for a given section.
     https://developer.sky.blackbaud.com/docs/services/school/operations/V1AcademicsSectionsBySection_idCyclesGet
@@ -93,7 +96,7 @@ def get_cycles_by_section(
 def get_departments(
     school: BaseSolutionClient,
     level_id: Optional[int] = None,
-):
+) -> Response:
     """
     Gets a collection of academic departments.
     https://developer.sky.blackbaud.com/docs/services/school/operations/V1AcademicsDepartmentsGet
@@ -113,7 +116,7 @@ def enroll_students_into_sections(
     enrollment_date: datetime,
     section_ids: Iterable[int],
     user_ids: Iterable[int],
-):
+) -> Response:
     """
     Adds bulk enrollment data (students and/or teachers) for the specified section(s).
     https://developer.sky.blackbaud.com/docs/services/school/operations/V1AcademicsSectionsStudentsPost
@@ -135,7 +138,7 @@ def get_graded_assignments_by_student(
     student_id: int,
     section_id: int,
     marking_period_id: int,
-):
+) -> Response:
     """
     Returns the graded assignments for the specified student_id and their section_id.
     https://developer.sky.blackbaud.com/docs/services/school/operations/V1AcademicsByStudent_idBySection_idGradedassignmentsGet
@@ -155,7 +158,7 @@ def get_master_schedule(
     start_date: datetime,
     end_date: datetime,
     offering_type: Optional[int] = None,
-):
+) -> Response:
     """
     Returns a collection of Master Schedule days within the date range provided.
     https://developer.sky.blackbaud.com/docs/services/school/operations/V1AcademicsSchedulesMasterGet
@@ -172,7 +175,10 @@ def get_master_schedule(
     )
 
 
-def get_schedule_set(school: BaseSolutionClient, schedule_set_id: int):
+def get_schedule_set(
+    school: BaseSolutionClient,
+    schedule_set_id: int
+) -> Response:
     """
     Returns details about the schedule set specified.
     https://developer.sky.blackbaud.com/docs/services/school/operations/V1AcademicsSchedulesSetsBySchedule_set_idGet
@@ -185,7 +191,7 @@ def get_schedule_sets_by_level(
     level_id: int,
     school_year: Optional[str] = None,
     group_type: Optional[int] = None,
-):
+) -> Response:
     """
     Returns a list of Schedule Sets for the specified school level.
     https://developer.sky.blackbaud.com/docs/services/school/operations/V1AcademicsSchedulesSetsGet
@@ -205,7 +211,7 @@ def get_sections_by_level(
     school: BaseSolutionClient,
     level_id: int,
     school_year: Optional[str] = None,
-):
+) -> Response:
     """
     Returns a list of academic sections for the specified school level.
     https://developer.sky.blackbaud.com/docs/services/school/operations/V1AcademicsSectionsGet
@@ -221,7 +227,7 @@ def get_sections_by_teacher(
     school: BaseSolutionClient,
     teacher_id: int,
     school_year: Optional[str] = None,
-):
+) -> Response:
     """
     Returns a list of sections for the specified teacher.
     https://developer.sky.blackbaud.com/docs/services/school/operations/V1AcademicsTeachersByTeacher_idSectionsGet
@@ -236,7 +242,7 @@ def get_sections_by_teacher(
 def get_sections_by_student(
     school: BaseSolutionClient,
     student_id: int,
-):
+) -> Response:
     """
     Returns a list of sections for the specified student.
     https://developer.sky.blackbaud.com/docs/services/school/operations/V1AcademicsStudentByStudent_idSectionsGet
@@ -247,7 +253,7 @@ def get_sections_by_student(
 def get_special_days(
     school: BaseSolutionClient,
     level_id: Optional[int] = None,
-):
+) -> Response:
     """
     Returns a list of special days.
     https://developer.sky.blackbaud.com/docs/services/school/operations/V1AcademicsSpecialdaysGet
@@ -265,7 +271,7 @@ def get_enrollments_by_student(
     school: BaseSolutionClient,
     user_id: int,
     school_year: Optional[str] = None,
-):
+) -> Response:
     """
     Returns a list of course sections in which the provided student is enrolled.
     https://developer.sky.blackbaud.com/docs/services/school/operations/V1AcademicsEnrollmentsByUser_idGet
@@ -283,7 +289,7 @@ def get_enrollment_changes(
     school: BaseSolutionClient,
     start_date: datetime,
     end_date: Optional[datetime] = None,
-):
+) -> Response:
     """
     Returns a collection of students with enrollment changes on or after the date parameter.
     The maximum period of time that can be specified is 30 days from start_date, if end_date
@@ -303,7 +309,7 @@ def get_enrollment_changes(
 def get_students_by_section(
     school: BaseSolutionClient,
     section_id: int,
-):
+) -> Response:
     """
     Returns the list of students in the specified section.
     https://developer.sky.blackbaud.com/docs/services/school/operations/V1AcademicsSectionsBySection_idStudentsGet

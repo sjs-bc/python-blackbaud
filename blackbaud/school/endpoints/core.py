@@ -1,11 +1,11 @@
-from datetime import datetime
-from typing import List, Optional, Literal
+from typing import Optional
+
+from requests import Response
+
 from blackbaud.client import BaseSolutionClient
 
 
-def get_custom_fields(
-    school: BaseSolutionClient,
-):
+def get_custom_fields(school: BaseSolutionClient) -> Response:
     """
     Returns a collection of admin custom fields.
     https://developer.sky.blackbaud.com/docs/services/school/operations/V1CustomfieldsGet
@@ -13,9 +13,7 @@ def get_custom_fields(
     return school._make_request("GET", "customfields")
 
 
-def get_grade_levels(
-    school: BaseSolutionClient,
-):
+def get_grade_levels(school: BaseSolutionClient) -> Response:
     """
     Returns a collection of core school grade levels.
     https://developer.sky.blackbaud.com/docs/services/school/operations/v1gradelevelsget
@@ -23,9 +21,7 @@ def get_grade_levels(
     return school._make_request("GET", "gradelevels")
 
 
-def get_offering_types(
-    school: BaseSolutionClient,
-):
+def get_offering_types(school: BaseSolutionClient) -> Response:
     """
     Returns a collection of core school offering types.
     https://developer.sky.blackbaud.com/docs/services/school/operations/v1offeringtypesget
@@ -33,9 +29,7 @@ def get_offering_types(
     return school._make_request("GET", "offeringtypes")
 
 
-def get_roles(
-    school: BaseSolutionClient,
-):
+def get_roles(school: BaseSolutionClient) -> Response:
     """
     Returns a collection of core school user roles.
     https://developer.sky.blackbaud.com/docs/services/school/operations/v1rolesget
@@ -43,9 +37,7 @@ def get_roles(
     return school._make_request("GET", "roles")
 
 
-def get_school_levels(
-    school: BaseSolutionClient,
-):
+def get_school_levels(school: BaseSolutionClient) -> Response:
     """
     Returns a collection of core school levels.
     https://developer.sky.blackbaud.com/docs/services/school/operations/v1levelsget
@@ -57,7 +49,7 @@ def get_sessions(
     school: BaseSolutionClient,
     level_id: Optional[int] = None,
     school_year: Optional[str] = None,
-):
+) -> Response:
     """
     Returns a collection of sessions for a higher education institution.
     https://developer.sky.blackbaud.com/docs/services/school/operations/V1SessionsGet
@@ -76,7 +68,7 @@ def get_terms(
     school: BaseSolutionClient,
     school_year: Optional[str] = None,
     offering_type: Optional[int] = None,
-):
+) -> Response:
     """
     Returns a collection of core school terms.
     https://developer.sky.blackbaud.com/docs/services/school/operations/v1termsget
@@ -91,9 +83,7 @@ def get_terms(
     )
 
 
-def get_timezone(
-    school: BaseSolutionClient,
-):
+def get_timezone(school: BaseSolutionClient) -> Response:
     """
     Returns the current time zone set for the school.
     https://developer.sky.blackbaud.com/docs/services/school/operations/V1TimezoneGet
@@ -101,9 +91,7 @@ def get_timezone(
     return school._make_request("GET", "timezone")
 
 
-def get_school_years(
-    school: BaseSolutionClient,
-):
+def get_school_years(school: BaseSolutionClient) -> Response:
     """
     Returns a collection of core school years.
     https://developer.sky.blackbaud.com/docs/services/school/operations/v1yearsget
@@ -111,9 +99,7 @@ def get_school_years(
     return school._make_request("GET", "years")
 
 
-def get_lists(
-    school: BaseSolutionClient,
-):
+def get_lists(school: BaseSolutionClient) -> Response:
     """
     Returns a list of basic or advanced lists the authorized user has access to.
     https://developer.sky.blackbaud.com/docs/services/school/operations/V1ListsGet
@@ -126,7 +112,7 @@ def get_list(
     list_id: int,
     page: Optional[int] = 1,
     page_size: Optional[int] = 1000,
-):
+) -> Response:
     """
     Returns a collection of results from a basic or advanced list.
     https://developer.sky.blackbaud.com/docs/services/school/operations/V1ListsAdvancedByList_idGet
@@ -139,3 +125,11 @@ def get_list(
             "page_size": page_size,
         },
     )
+
+
+def get_directories(school: BaseSolutionClient) -> Response:
+    """
+    Returns a collection of directories the authorized user has access to.
+    https://developer.sky.blackbaud.com/docs/services/school/operations/V1DirectoriesGet
+    """
+    return school._make_request("GET", "directories")

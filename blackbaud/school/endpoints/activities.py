@@ -1,4 +1,7 @@
 from typing import Optional
+
+from requests import Response
+
 from blackbaud.client import BaseSolutionClient
 
 
@@ -6,7 +9,7 @@ def get_activity_sections_by_level(
     school: BaseSolutionClient,
     level_id: int,
     school_year: Optional[str] = None,
-):
+) -> Response:
     """
     Returns a collection of activity sections for the specified school level.
     https://developer.sky.blackbaud.com/docs/services/school/operations/V1ActivitiesSectionsGet
