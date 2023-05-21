@@ -133,3 +133,23 @@ def get_directories(school: BaseSolutionClient) -> Response:
     https://developer.sky.blackbaud.com/docs/services/school/operations/V1DirectoriesGet
     """
     return school._make_request("GET", "directories")
+
+
+def search_directory(
+    school: BaseSolutionClient,
+    directory_id: int,
+    search: str,
+    search_all: Optional[bool] = True,
+) -> Response:
+    """
+    Returns a collection of results from a directory search.
+    https://developer.sky.blackbaud.com/docs/services/school/operations/V1DirectoriesByDirectory_idSearchGet
+    """
+    return school._make_request(
+        "GET",
+        f"directories/{directory_id}",
+        params={
+            "search": search,
+            "search_all": search_all,
+        },
+    )
