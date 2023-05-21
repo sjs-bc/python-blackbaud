@@ -51,7 +51,7 @@ def get_assignments_by_student(
         f"academics/{student_id}/assignments",
         params={
             "start_date": start_date.isoformat(),
-            "end_date": end_date.isoformat() if end_date is not None else None,
+            "end_date": end_date.isoformat() if end_date else None,
             "section_ids": section_ids,
         },
         **request_kwargs,

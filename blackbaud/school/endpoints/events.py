@@ -20,8 +20,8 @@ def get_calendar_for_self(
         "GET",
         "events/calendar",
         params={
-            "start_date": start_date.isoformat() if start_date is not None else None,
-            "end_date": end_date.isoformat() if end_date is not None else None,
+            "start_date": start_date.isoformat() if start_date else None,
+            "end_date": end_date.isoformat() if end_date else None,
         },
         **request_kwargs,
     )
