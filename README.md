@@ -46,7 +46,7 @@ client.fetch_token(
 authorized_user = users.get_self(school)
 ```
 
-Endpoints are implemented as functions that take a client object (and any required parameter) as an argument. So far, only [education management endpoints](https://developer.sky.blackbaud.com/docs/services/school) have been implemented.
+Endpoints are implemented as functions that take a client object (and any required parameter) as an argument, and return a `requests.Response`. So far, only [education management endpoints](https://developer.sky.blackbaud.com/docs/services/school) have been implemented.
 
 They standardize certain parameter names to alleviate inconsistencies and avoid confusion (eg. school level identifiers being called `level_id` in some endpoints and `level_num` in others).
 
