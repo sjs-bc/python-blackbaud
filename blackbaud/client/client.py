@@ -271,7 +271,6 @@ class BaseSolutionClient:
         self,
         http_verb: Literal["GET", "POST", "PUT", "PATCH", "DELETE"],
         path: str,
-        # params: Optional[dict[Any, Any]] = None,
         data: Optional[dict[Any, Any]] = None,
         **kwargs,
     ) -> requests.Response:
