@@ -9,18 +9,18 @@ from blackbaud.client import BaseSolutionClient
 
 
 def get_self(
-    school: BaseSolutionClient,
+    client: BaseSolutionClient,
     **request_kwargs,
 ) -> Response:
     """
     Returns information about the caller.
     https://developer.sky.blackbaud.com/docs/services/school/operations/V1UsersMeGet
     """
-    return school._make_request("GET", "users/me", **request_kwargs)
+    return client._make_request("GET", "users/me", **request_kwargs)
 
 
 def get_user_by_id(
-    school: BaseSolutionClient,
+    client: BaseSolutionClient,
     user_id: int,
     **request_kwargs,
 ) -> Response:
@@ -28,11 +28,11 @@ def get_user_by_id(
     Returns a user by ID.
     https://developer.sky.blackbaud.com/docs/services/school/operations/V1UsersByUser_idGet
     """
-    return school._make_request("GET", f"users/{user_id}", **request_kwargs)
+    return client._make_request("GET", f"users/{user_id}", **request_kwargs)
 
 
 def get_user_by_id_details(
-    school: BaseSolutionClient,
+    client: BaseSolutionClient,
     user_id: int,
     **request_kwargs,
 ) -> Response:
@@ -40,11 +40,11 @@ def get_user_by_id_details(
     Returns a user by ID, with extended details.
     https://developer.sky.blackbaud.com/docs/services/school/operations/V1UsersExtendedByUser_idGet
     """
-    return school._make_request("GET", f"users/extended/{user_id}", **request_kwargs)
+    return client._make_request("GET", f"users/extended/{user_id}", **request_kwargs)
 
 
 def get_users_by_roles(
-    school: BaseSolutionClient,
+    client: BaseSolutionClient,
     role_ids: Iterable[int],
     first_name: Optional[str] = None,
     last_name: Optional[str] = None,
@@ -59,7 +59,7 @@ def get_users_by_roles(
     Returns a paginated collection of users, limited to 100 users per page.
     https://developer.sky.blackbaud.com/docs/services/school/operations/v1usersget
     """
-    return school._make_request(
+    return client._make_request(
         "GET",
         "users",
         params={
@@ -77,7 +77,7 @@ def get_users_by_roles(
 
 
 def get_users_by_roles_detailed(
-    school: BaseSolutionClient,
+    client: BaseSolutionClient,
     role_ids: Iterable[int],
     marker: Optional[int] = None,
     **request_kwargs,
@@ -86,7 +86,7 @@ def get_users_by_roles_detailed(
     Returns a paginated collection of extended user details, limited to 1000 users per
     page. Use the last user's ID as the marker value to return the next set of results.
     """
-    return school._make_request(
+    return client._make_request(
         "GET",
         "users/extended",
         params={"base_role_ids": ",".join(map(str, role_ids)), "marker": marker},
@@ -95,7 +95,7 @@ def get_users_by_roles_detailed(
 
 
 def audit_users_by_role(
-    school: BaseSolutionClient,
+    client: BaseSolutionClient,
     role_id: int,
     start_date: Optional[datetime] = None,
     end_date: Optional[datetime] = None,
@@ -106,7 +106,7 @@ def audit_users_by_role(
     dates provided.
     https://developer.sky.blackbaud.com/docs/services/school/operations/V1UsersAuditGet
     """
-    return school._make_request(
+    return client._make_request(
         "GET",
         "users/audit",
         params={
@@ -119,7 +119,7 @@ def audit_users_by_role(
 
 
 def get_changed_users_by_roles(
-    school: BaseSolutionClient,
+    client: BaseSolutionClient,
     role_ids: Iterable[int],
     start_date: Optional[datetime] = None,
     **request_kwargs,
@@ -130,7 +130,7 @@ def get_changed_users_by_roles(
     seven days.
     https://developer.sky.blackbaud.com/docs/services/school/operations/V1UsersChangedGet
     """
-    return school._make_request(
+    return client._make_request(
         "GET",
         "users/changed",
         params={
@@ -142,7 +142,7 @@ def get_changed_users_by_roles(
 
 
 def create_user(
-    school: BaseSolutionClient,
+    client: BaseSolutionClient,
     affiliation: Optional[str] = None,
     prefix: Optional[str] = None,
     first_name: Optional[str] = None,
@@ -175,7 +175,7 @@ def create_user(
     Creates a user. Returns the new user's User ID.
     https://developer.sky.blackbaud.com/docs/services/school/operations/V1UsersPost
     """
-    return school._make_request(
+    return client._make_request(
         "POST",
         "users",
         data={
@@ -211,7 +211,7 @@ def create_user(
 
 
 def update_user(
-    school: BaseSolutionClient,
+    client: BaseSolutionClient,
     user_id: int,
     affiliation: Optional[str] = None,
     prefix: Optional[str] = None,
@@ -245,7 +245,7 @@ def update_user(
     Updates a user.
     https://developer.sky.blackbaud.com/docs/services/school/operations/V1UsersPatch
     """
-    return school._make_request(
+    return client._make_request(
         "PATCH",
         "users",
         data={
@@ -281,16 +281,16 @@ def update_user(
     )
 
 
-def get_user_address_types(school: BaseSolutionClient, **request_kwargs) -> Response:
+def get_user_address_types(client: BaseSolutionClient, **request_kwargs) -> Response:
     """
     Returns a list of address types.
     https://developer.sky.blackbaud.com/docs/services/school/operations/V1UsersAddresstypesGet
     """
-    return school._make_request("GET", "users/addresstypes", **request_kwargs)
+    return client._make_request("GET", "users/addresstypes", **request_kwargs)
 
 
 def create_user_address(
-    school: BaseSolutionClient,
+    client: BaseSolutionClient,
     user_id: int,
     address_type: int,
     country: str,
@@ -310,7 +310,7 @@ def create_user_address(
     Creates an address for a user. Returns the ID of the address created.
     https://developer.sky.blackbaud.com/docs/services/school/operations/V1UsersByUser_idAddressesPost
     """
-    return school._make_request(
+    return client._make_request(
         "POST",
         f"users/{user_id}/addresses",
         data={
@@ -333,7 +333,7 @@ def create_user_address(
 
 
 def update_user_address(
-    school: BaseSolutionClient,
+    client: BaseSolutionClient,
     user_id: int,
     address_id: int,
     address_type: Optional[int] = None,
@@ -355,7 +355,7 @@ def update_user_address(
     Updates an address for a user.
     https://developer.sky.blackbaud.com/docs/services/school/operations/V1UsersByUser_idAddressesByAddress_idPatch
     """
-    return school._make_request(
+    return client._make_request(
         "PATCH",
         f"users/{user_id}/addresses/{address_id}",
         data={
@@ -380,17 +380,17 @@ def update_user_address(
 
 
 def get_user_addresses(
-    school: BaseSolutionClient, user_id: int, **request_kwargs
+    client: BaseSolutionClient, user_id: int, **request_kwargs
 ) -> Response:
     """
     Returns a collection of addresses for a user.
     https://developer.sky.blackbaud.com/docs/services/school/operations/V1UsersByUser_idAddressesGet
     """
-    return school._make_request("GET", f"users/{user_id}/addresses", **request_kwargs)
+    return client._make_request("GET", f"users/{user_id}/addresses", **request_kwargs)
 
 
 def get_user_children(
-    school: BaseSolutionClient,
+    client: BaseSolutionClient,
     user_id: int,
     **request_kwargs,
 ) -> Response:
@@ -398,11 +398,11 @@ def get_user_children(
     Returns a collection of children of the specified user_id.
     https://developer.sky.blackbaud.com/docs/services/school/operations/V1UsersByParent_idStudentsGet
     """
-    return school._make_request("GET", f"users/{user_id}/students", **request_kwargs)
+    return client._make_request("GET", f"users/{user_id}/students", **request_kwargs)
 
 
 def get_custom_fields_by_roles(
-    school: BaseSolutionClient,
+    client: BaseSolutionClient,
     role_ids: Iterable[int],
     marker: Optional[int] = None,
     field_ids: Optional[Iterable[int]] = None,
@@ -412,7 +412,7 @@ def get_custom_fields_by_roles(
     Returns a collection of custom fields for the specified roles.
     https://developer.sky.blackbaud.com/docs/services/school/operations/V1UsersCustomfieldsByRolesGet
     """
-    return school._make_request(
+    return client._make_request(
         "GET",
         "users/customfields",
         params={
@@ -425,7 +425,7 @@ def get_custom_fields_by_roles(
 
 
 def get_user_custom_fields(
-    school: BaseSolutionClient,
+    client: BaseSolutionClient,
     user_id: int,
     **request_kwargs,
 ) -> Response:
@@ -434,13 +434,13 @@ def get_user_custom_fields(
     Includes both user custom fields and administration view only custom fields.
     https://developer.sky.blackbaud.com/docs/services/school/operations/V1UsersByUser_idCustomfieldsGet
     """
-    return school._make_request(
+    return client._make_request(
         "GET", f"users/{user_id}/customfields", **request_kwargs
     )
 
 
 def create_user_custom_field(
-    school: BaseSolutionClient,
+    client: BaseSolutionClient,
     user_id: int,
     field_id: int,
     data_type_id: int,
@@ -451,7 +451,7 @@ def create_user_custom_field(
     Creates an admin custom field for a user.
     https://developer.sky.blackbaud.com/docs/services/school/operations/V1UsersByUser_idCustomfieldsPost
     """
-    return school._make_request(
+    return client._make_request(
         "POST",
         f"users/{user_id}/customfields",
         data={
@@ -470,7 +470,7 @@ def create_user_custom_field(
 
 
 def update_user_custom_field(
-    school: BaseSolutionClient,
+    client: BaseSolutionClient,
     user_id: int,
     field_id: int,
     data_type_id: int,
@@ -481,7 +481,7 @@ def update_user_custom_field(
     Updates an admin custom field for a user.
     https://developer.sky.blackbaud.com/docs/services/school/operations/V1UsersByUser_idCustomfieldsPatch
     """
-    return school._make_request(
+    return client._make_request(
         "PATCH",
         f"users/{user_id}/customfields",
         data={
@@ -500,7 +500,7 @@ def update_user_custom_field(
 
 
 def get_user_bbid_status(
-    school: BaseSolutionClient,
+    client: BaseSolutionClient,
     role_ids: Iterable[int],
     marker: Optional[int] = None,
     **request_kwargs,
@@ -511,7 +511,7 @@ def get_user_bbid_status(
     to return the next set of results.
     https://developer.sky.blackbaud.com/docs/services/school/operations/V1UsersBbidstatusGet
     """
-    return school._make_request(
+    return client._make_request(
         "GET",
         "users/bbidstatus",
         params={
@@ -523,7 +523,7 @@ def get_user_bbid_status(
 
 
 def get_user_education(
-    school: BaseSolutionClient,
+    client: BaseSolutionClient,
     user_id: int,
     **request_kwargs,
 ) -> Response:
@@ -531,11 +531,11 @@ def get_user_education(
     Returns a collection of education information for the specified user.
     https://developer.sky.blackbaud.com/docs/services/school/operations/V1UsersByUser_idEducationGet
     """
-    return school._make_request("GET", f"users/{user_id}/education", **request_kwargs)
+    return client._make_request("GET", f"users/{user_id}/education", **request_kwargs)
 
 
 def get_changed_emergency_contacts(
-    school: BaseSolutionClient,
+    client: BaseSolutionClient,
     start_date: Optional[datetime] = None,
     marker: Optional[int] = None,
     **request_kwargs,
@@ -547,7 +547,7 @@ def get_changed_emergency_contacts(
     Use the last user's ID as the marker value to return the next set of results.
     https://developer.sky.blackbaud.com/docs/services/school/operations/V1UsersEmergencycontactsChangedGet
     """
-    return school._make_request(
+    return client._make_request(
         "GET",
         "users/emergencycontacts/changed",
         params={
@@ -565,7 +565,7 @@ class AutomatedEmergencyContact(Enum):
 
 
 def create_emergency_contact(
-    school: BaseSolutionClient,
+    client: BaseSolutionClient,
     user_id: int,
     first_name: Optional[str] = None,
     last_name: Optional[str] = None,
@@ -581,7 +581,7 @@ def create_emergency_contact(
     Creates a non-user emergency contact for the given user.
     https://developer.sky.blackbaud.com/docs/services/school/operations/V1UsersByUser_idEmergencycontactsNonuserPost
     """
-    return school._make_request(
+    return client._make_request(
         "POST",
         f"users/{user_id}/emergencycontacts/nonuser",
         data={
@@ -599,7 +599,7 @@ def create_emergency_contact(
 
 
 def create_emergency_contact_user(
-    school: BaseSolutionClient,
+    client: BaseSolutionClient,
     user_id: int,
     phone_number: Optional[str] = None,
     automated_call: Optional[AutomatedEmergencyContact] = None,
@@ -611,7 +611,7 @@ def create_emergency_contact_user(
     Creates a non-user emergency contact for the given user.
     https://developer.sky.blackbaud.com/docs/services/school/operations/V1UsersByUser_idEmergencycontactsNonuserPost
     """
-    return school._make_request(
+    return client._make_request(
         "POST",
         f"users/{user_id}/emergencycontacts/nonuser",
         data={
@@ -625,7 +625,7 @@ def create_emergency_contact_user(
 
 
 def get_user_emergency_contacts(
-    school: BaseSolutionClient,
+    client: BaseSolutionClient,
     user_id: int,
     **request_kwargs,
 ) -> Response:
@@ -633,13 +633,13 @@ def get_user_emergency_contacts(
     Returns a collection of emergency contacts for the specified user.
     https://developer.sky.blackbaud.com/docs/services/school/operations/V1UsersByUser_idEmergencycontactsGet
     """
-    return school._make_request(
+    return client._make_request(
         "GET", f"users/{user_id}/emergencycontacts", **request_kwargs
     )
 
 
 def get_user_employment(
-    school: BaseSolutionClient,
+    client: BaseSolutionClient,
     user_id: int,
     **request_kwargs,
 ) -> Response:
@@ -647,11 +647,11 @@ def get_user_employment(
     Returns a collection of employment details for the specified user.
     https://developer.sky.blackbaud.com/docs/services/school/operations/V1UsersByUser_idEmploymentGet
     """
-    return school._make_request("GET", f"users/{user_id}/employment", **request_kwargs)
+    return client._make_request("GET", f"users/{user_id}/employment", **request_kwargs)
 
 
 def create_user_enrollment(
-    school: BaseSolutionClient,
+    client: BaseSolutionClient,
     user_id: int,
     grade_level_id: int,
     enrollment_date: datetime,
@@ -675,7 +675,7 @@ def create_user_enrollment(
     Creates an enrollment for the given user.
     https://developer.sky.blackbaud.com/docs/services/school/operations/V1UsersByUser_idEnrollmentsPost
     """
-    return school._make_request(
+    return client._make_request(
         "POST",
         "users/enroll",
         data={
@@ -705,7 +705,7 @@ def create_user_enrollment(
 
 
 def get_user_enrollments_by_year(
-    school: BaseSolutionClient,
+    client: BaseSolutionClient,
     school_year: str,
     school_level_id: Optional[int] = None,
     grade_level_id: Optional[int] = None,
@@ -717,7 +717,7 @@ def get_user_enrollments_by_year(
     Returns a collection of enrollments for the specified user.
     https://developer.sky.blackbaud.com/docs/services/school/operations/V1UsersByUser_idEnrollmentsGet
     """
-    return school._make_request(
+    return client._make_request(
         "GET",
         "users/enrollments",
         params={
@@ -732,18 +732,18 @@ def get_user_enrollments_by_year(
 
 
 def get_gender_types(
-    school: BaseSolutionClient,
+    client: BaseSolutionClient,
     **request_kwargs,
 ) -> Response:
     """
     Returns a collection of gender types.
     https://developer.sky.blackbaud.com/docs/services/school/operations/V1UsersGendertypesGet
     """
-    return school._make_request("GET", "users/gendertypes", **request_kwargs)
+    return client._make_request("GET", "users/gendertypes", **request_kwargs)
 
 
 def get_user_occupations(
-    school: BaseSolutionClient,
+    client: BaseSolutionClient,
     user_id: int,
     **request_kwargs,
 ) -> Response:
@@ -751,11 +751,11 @@ def get_user_occupations(
     Returns a collection of occupations for the specified user.
     https://developer.sky.blackbaud.com/docs/services/school/operations/V1UsersByUser_idOccupationsGet
     """
-    return school._make_request("GET", f"users/{user_id}/occupations", **request_kwargs)
+    return client._make_request("GET", f"users/{user_id}/occupations", **request_kwargs)
 
 
 def create_user_occupation(
-    school: BaseSolutionClient,
+    client: BaseSolutionClient,
     user_id: int,
     business_name: Optional[str] = None,
     job_title: Optional[str] = None,
@@ -777,7 +777,7 @@ def create_user_occupation(
     Creates an occupation for the given user.
     https://developer.sky.blackbaud.com/docs/services/school/operations/V1UsersByUser_idOccupationsPost
     """
-    return school._make_request(
+    return client._make_request(
         "POST",
         f"users/{user_id}/occupations",
         data={
@@ -801,18 +801,18 @@ def create_user_occupation(
 
 
 def get_phone_types(
-    school: BaseSolutionClient,
+    client: BaseSolutionClient,
     **request_kwargs,
 ) -> Response:
     """
     Returns a collection of phone types.
     https://developer.sky.blackbaud.com/docs/services/school/operations/V1UsersPhonetypesGet
     """
-    return school._make_request("GET", "users/phonetypes", **request_kwargs)
+    return client._make_request("GET", "users/phonetypes", **request_kwargs)
 
 
 def get_user_phones(
-    school: BaseSolutionClient,
+    client: BaseSolutionClient,
     user_id: int,
     **request_kwargs,
 ) -> Response:
@@ -820,11 +820,11 @@ def get_user_phones(
     Returns a collection of phones for the specified user.
     https://developer.sky.blackbaud.com/docs/services/school/operations/V1UsersByUser_idPhonesGet
     """
-    return school._make_request("GET", f"users/{user_id}/phones", **request_kwargs)
+    return client._make_request("GET", f"users/{user_id}/phones", **request_kwargs)
 
 
 def create_user_phone(
-    school: BaseSolutionClient,
+    client: BaseSolutionClient,
     user_id: int,
     phone_type_id: int,
     phone_number: str,
@@ -834,7 +834,7 @@ def create_user_phone(
     Creates a phone for the given user.
     https://developer.sky.blackbaud.com/docs/services/school/operations/V1UsersByUser_idPhonesPost
     """
-    return school._make_request(
+    return client._make_request(
         "POST",
         f"users/{user_id}/phones",
         data={
@@ -846,7 +846,7 @@ def create_user_phone(
 
 
 def get_user_relationships(
-    school: BaseSolutionClient,
+    client: BaseSolutionClient,
     user_id: int,
     **request_kwargs,
 ) -> Response:
@@ -854,7 +854,7 @@ def get_user_relationships(
     Returns a collection of relationships for the specified user.
     https://developer.sky.blackbaud.com/docs/services/school/operations/V1UsersByUser_idRelationshipsGet
     """
-    return school._make_request(
+    return client._make_request(
         "GET", f"users/{user_id}/relationships", **request_kwargs
     )
 
@@ -906,7 +906,7 @@ class RelationshipType(Enum):
 
 
 def create_user_relationship(
-    school: BaseSolutionClient,
+    client: BaseSolutionClient,
     related_user_id: int,
     relationship_type: RelationshipType,
     user_id: int,
@@ -921,7 +921,7 @@ def create_user_relationship(
     (ie. the related_user is on the LEFT side of the relationship)
     https://developer.sky.blackbaud.com/docs/services/school/operations/V1UsersByUser_idRelationshipsPost
     """
-    return school._make_request(
+    return client._make_request(
         "POST",
         f"users/{user_id}/relationships",
         data={
@@ -936,7 +936,7 @@ def create_user_relationship(
 
 
 def delete_user_relationship(
-    school: BaseSolutionClient,
+    client: BaseSolutionClient,
     related_user_id: int,
     relationship_type: RelationshipType,
     user_id: int,
@@ -946,7 +946,7 @@ def delete_user_relationship(
     Deletes the specified relationship record for the specified user.
     https://developer.sky.blackbaud.com/docs/services/school/operations/V1UsersByUser_idRelationshipsByRelationship_idDelete
     """
-    return school._make_request(
+    return client._make_request(
         "DELETE",
         f"users/{user_id}/relationships/",
         params={

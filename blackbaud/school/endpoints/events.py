@@ -7,7 +7,7 @@ from blackbaud.client import BaseSolutionClient
 
 
 def get_calendar_for_self(
-    school: BaseSolutionClient,
+    client: BaseSolutionClient,
     start_date: Optional[datetime] = None,
     end_date: Optional[datetime] = None,
     **request_kwargs,
@@ -16,7 +16,7 @@ def get_calendar_for_self(
     Returns a list of events for the calling user.
     https://developer.sky.blackbaud.com/docs/services/school/operations/V1EventsCalendarGet
     """
-    return school._make_request(
+    return client._make_request(
         "GET",
         "events/calendar",
         params={
@@ -28,11 +28,11 @@ def get_calendar_for_self(
 
 
 def get_categories(
-    school: BaseSolutionClient,
+    client: BaseSolutionClient,
     **request_kwargs,
 ) -> Response:
     """
     Returns a collection of event categories.
     https://developer.sky.blackbaud.com/docs/services/school/operations/V1EventsCategoriesGet
     """
-    return school._make_request("GET", "events/categories", **request_kwargs)
+    return client._make_request("GET", "events/categories", **request_kwargs)

@@ -7,7 +7,7 @@ from blackbaud.client import BaseSolutionClient
 
 
 def get_candidates(
-    school: BaseSolutionClient,
+    client: BaseSolutionClient,
     school_year: Optional[str] = None,
     status_ids: Optional[Iterable[int]] = None,
     modified_date: Optional[datetime] = None,
@@ -17,7 +17,7 @@ def get_candidates(
     Returns a collection of admissions candidates.
     https://developer.sky.blackbaud.com/docs/services/school/operations/V1AdmissionsCandidatesGet
     """
-    return school._make_request(
+    return client._make_request(
         "GET",
         "admissions/candidates",
         params={
@@ -30,18 +30,18 @@ def get_candidates(
 
 
 def get_checklist_statuses(
-    school: BaseSolutionClient,
+    client: BaseSolutionClient,
     **request_kwargs,
 ) -> Response:
     """
     Returns a collection of admissions checklist statuses.
     https://developer.sky.blackbaud.com/docs/services/school/operations/V1AdmissionsCheckliststatusGet
     """
-    return school._make_request("GET", "admissions/checkliststatus", **request_kwargs)
+    return client._make_request("GET", "admissions/checkliststatus", **request_kwargs)
 
 
 def get_checklists(
-    school: BaseSolutionClient,
+    client: BaseSolutionClient,
     search: Optional[str] = None,
     inactive_only: Optional[bool] = False,
     **request_kwargs,
@@ -50,7 +50,7 @@ def get_checklists(
     Returns a collection of admissions checklists.
     https://developer.sky.blackbaud.com/docs/services/school/operations/V1AdmissionsChecklistsGet
     """
-    return school._make_request(
+    return client._make_request(
         "GET",
         "admissions/checklists",
         params={
@@ -62,11 +62,11 @@ def get_checklists(
 
 
 def get_admissions_statuses(
-    school: BaseSolutionClient,
+    client: BaseSolutionClient,
     **request_kwargs,
 ) -> Response:
     """
     Returns a collection of admissions statuses.
     https://developer.sky.blackbaud.com/docs/services/school/operations/V1AdmissionsStatusGet
     """
-    return school._make_request("GET", "admissions/status", **request_kwargs)
+    return client._make_request("GET", "admissions/status", **request_kwargs)

@@ -7,7 +7,7 @@ from blackbaud.client import BaseSolutionClient
 
 
 def get_attendance_records(
-    school: BaseSolutionClient,
+    client: BaseSolutionClient,
     school_level_id: int,
     date: datetime,
     offering_type: int,
@@ -18,7 +18,7 @@ def get_attendance_records(
     Returns a collection of student attendance records for the specified day.
     https://developer.sky.blackbaud.com/docs/services/school/operations/V1AttendanceGet
     """
-    return school._make_request(
+    return client._make_request(
         "GET",
         "attendance",
         params={
@@ -32,7 +32,7 @@ def get_attendance_records(
 
 
 def create_attendance_record(
-    school: BaseSolutionClient,
+    client: BaseSolutionClient,
     user_id: int,
     start_date: datetime,
     end_date: Optional[datetime] = None,
@@ -45,7 +45,7 @@ def create_attendance_record(
     Creates a new attendance record for the specified student.
     https://developer.sky.blackbaud.com/docs/services/school/operations/V1AttendancePost
     """
-    return school._make_request(
+    return client._make_request(
         "POST",
         "attendance",
         data={
@@ -65,25 +65,25 @@ def create_attendance_record(
     )
 
 
-def get_attendance_types(school: BaseSolutionClient, **request_kwargs) -> Response:
+def get_attendance_types(client: BaseSolutionClient, **request_kwargs) -> Response:
     """
     Returns a list of attendance types.
     https://developer.sky.blackbaud.com/docs/services/school/operations/V1TypesAttendancetypesGet
     """
-    return school._make_request("GET", "types/attendancetypes", **request_kwargs)
+    return client._make_request("GET", "types/attendancetypes", **request_kwargs)
 
 
-def get_excuse_types(school: BaseSolutionClient, **request_kwargs) -> Response:
+def get_excuse_types(client: BaseSolutionClient, **request_kwargs) -> Response:
     """
     Returns a list of excuse types.
     https://developer.sky.blackbaud.com/docs/services/school/operations/V1TypesExcusedtypesGet
     """
-    return school._make_request("GET", "types/excusedtypes", **request_kwargs)
+    return client._make_request("GET", "types/excusedtypes", **request_kwargs)
 
 
-def get_excuse_duration_types(school: BaseSolutionClient, **request_kwargs) -> Response:
+def get_excuse_duration_types(client: BaseSolutionClient, **request_kwargs) -> Response:
     """
     Returns a list of excuse duration types.
     https://developer.sky.blackbaud.com/docs/services/school/operations/V1TypesExcusedurationtypesGet
     """
-    return school._make_request("GET", "types/excusedurationtypes", **request_kwargs)
+    return client._make_request("GET", "types/excusedurationtypes", **request_kwargs)

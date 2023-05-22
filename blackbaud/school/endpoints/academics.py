@@ -7,7 +7,7 @@ from blackbaud.client import BaseSolutionClient
 
 
 def get_assignments_by_section(
-    school: BaseSolutionClient,
+    client: BaseSolutionClient,
     section_id: int,
     types: Optional[Iterable[str]] = None,
     status: Optional[str] = None,
@@ -20,7 +20,7 @@ def get_assignments_by_section(
     Gets a collection of assignments for a given section.
     https://developer.sky.blackbaud.com/docs/services/school/operations/V1AcademicsSectionsBySection_idAssignmentsGet
     """
-    return school._make_request(
+    return client._make_request(
         "GET",
         f"academics/sections/{section_id}/assignments",
         params={
@@ -35,7 +35,7 @@ def get_assignments_by_section(
 
 
 def get_assignments_by_student(
-    school: BaseSolutionClient,
+    client: BaseSolutionClient,
     student_id: int,
     start_date: datetime,
     end_date: Optional[datetime] = None,
@@ -46,7 +46,7 @@ def get_assignments_by_student(
     Gets a collection of assignments for a given student.
     https://developer.sky.blackbaud.com/docs/services/school/operations/V1AcademicsByStudent_idAssignmentsGet
     """
-    return school._make_request(
+    return client._make_request(
         "GET",
         f"academics/{student_id}/assignments",
         params={
@@ -59,7 +59,7 @@ def get_assignments_by_student(
 
 
 def get_courses(
-    school: BaseSolutionClient,
+    client: BaseSolutionClient,
     department_id: Optional[int] = None,
     school_level_id: Optional[int] = None,
     **request_kwargs,
@@ -68,7 +68,7 @@ def get_courses(
     Gets a collection of academic courses, filtered by department and/or school level.
     https://developer.sky.blackbaud.com/docs/services/school/operations/V1AcademicsCoursesGet
     """
-    return school._make_request(
+    return client._make_request(
         "GET",
         "academics/courses",
         params={
@@ -80,7 +80,7 @@ def get_courses(
 
 
 def get_cycles_by_section(
-    school: BaseSolutionClient,
+    client: BaseSolutionClient,
     section_id: int,
     duration_id: Optional[int] = None,
     group_type: Optional[int] = None,
@@ -90,7 +90,7 @@ def get_cycles_by_section(
     Gets a collection of cycles for a given section.
     https://developer.sky.blackbaud.com/docs/services/school/operations/V1AcademicsSectionsBySection_idCyclesGet
     """
-    return school._make_request(
+    return client._make_request(
         "GET",
         f"academics/sections/{section_id}/cycles",
         params={
@@ -102,7 +102,7 @@ def get_cycles_by_section(
 
 
 def get_departments(
-    school: BaseSolutionClient,
+    client: BaseSolutionClient,
     school_level_id: Optional[int] = None,
     **request_kwargs,
 ) -> Response:
@@ -110,7 +110,7 @@ def get_departments(
     Gets a collection of academic departments.
     https://developer.sky.blackbaud.com/docs/services/school/operations/V1AcademicsDepartmentsGet
     """
-    return school._make_request(
+    return client._make_request(
         "GET",
         "academics/departments",
         params={
@@ -121,7 +121,7 @@ def get_departments(
 
 
 def enroll_students_into_sections(
-    school: BaseSolutionClient,
+    client: BaseSolutionClient,
     duration_id: int,
     enrollment_date: datetime,
     section_ids: Iterable[int],
@@ -132,7 +132,7 @@ def enroll_students_into_sections(
     Adds bulk enrollment data (students and/or teachers) for the specified section(s).
     https://developer.sky.blackbaud.com/docs/services/school/operations/V1AcademicsSectionsStudentsPost
     """
-    return school._make_request(
+    return client._make_request(
         "POST",
         "academics/sections/students",
         data={
@@ -146,7 +146,7 @@ def enroll_students_into_sections(
 
 
 def get_graded_assignments_by_student(
-    school: BaseSolutionClient,
+    client: BaseSolutionClient,
     student_id: int,
     section_id: int,
     marking_period_id: int,
@@ -156,7 +156,7 @@ def get_graded_assignments_by_student(
     Returns the graded assignments for the specified student_id and their section_id.
     https://developer.sky.blackbaud.com/docs/services/school/operations/V1AcademicsByStudent_idBySection_idGradedassignmentsGet
     """
-    return school._make_request(
+    return client._make_request(
         "GET",
         f"academics/{student_id}/{section_id}/gradedassignments",
         params={
@@ -167,7 +167,7 @@ def get_graded_assignments_by_student(
 
 
 def get_master_schedule(
-    school: BaseSolutionClient,
+    client: BaseSolutionClient,
     school_level_id: int,
     start_date: datetime,
     end_date: datetime,
@@ -178,7 +178,7 @@ def get_master_schedule(
     Returns a collection of Master Schedule days within the date range provided.
     https://developer.sky.blackbaud.com/docs/services/school/operations/V1AcademicsSchedulesMasterGet
     """
-    return school._make_request(
+    return client._make_request(
         "GET",
         "academics/schedules/master",
         params={
@@ -192,19 +192,19 @@ def get_master_schedule(
 
 
 def get_schedule_set(
-    school: BaseSolutionClient, schedule_set_id: int, **request_kwargs
+    client: BaseSolutionClient, schedule_set_id: int, **request_kwargs
 ) -> Response:
     """
     Returns details about the schedule set specified.
     https://developer.sky.blackbaud.com/docs/services/school/operations/V1AcademicsSchedulesSetsBySchedule_set_idGet
     """
-    return school._make_request(
+    return client._make_request(
         "GET", f"academics/schedules/sets/{schedule_set_id}", **request_kwargs
     )
 
 
 def get_schedule_sets_by_level(
-    school: BaseSolutionClient,
+    client: BaseSolutionClient,
     school_level_id: int,
     school_year: Optional[str] = None,
     group_type: Optional[int] = None,
@@ -214,7 +214,7 @@ def get_schedule_sets_by_level(
     Returns a list of Schedule Sets for the specified school level.
     https://developer.sky.blackbaud.com/docs/services/school/operations/V1AcademicsSchedulesSetsGet
     """
-    return school._make_request(
+    return client._make_request(
         "GET",
         "academics/schedules/sets",
         params={
@@ -227,7 +227,7 @@ def get_schedule_sets_by_level(
 
 
 def get_sections_by_level(
-    school: BaseSolutionClient,
+    client: BaseSolutionClient,
     school_level_id: int,
     school_year: Optional[str] = None,
     **request_kwargs,
@@ -236,7 +236,7 @@ def get_sections_by_level(
     Returns a list of academic sections for the specified school level.
     https://developer.sky.blackbaud.com/docs/services/school/operations/V1AcademicsSectionsGet
     """
-    return school._make_request(
+    return client._make_request(
         "GET",
         "academics/sections",
         params={"level_num": school_level_id, "school_year": school_year},
@@ -245,7 +245,7 @@ def get_sections_by_level(
 
 
 def get_sections_by_teacher(
-    school: BaseSolutionClient,
+    client: BaseSolutionClient,
     teacher_id: int,
     school_year: Optional[str] = None,
     **request_kwargs,
@@ -254,7 +254,7 @@ def get_sections_by_teacher(
     Returns a list of sections for the specified teacher.
     https://developer.sky.blackbaud.com/docs/services/school/operations/V1AcademicsTeachersByTeacher_idSectionsGet
     """
-    return school._make_request(
+    return client._make_request(
         "GET",
         f"academics/teachers/{teacher_id}/sections",
         params={"school_year": school_year},
@@ -263,7 +263,7 @@ def get_sections_by_teacher(
 
 
 def get_sections_by_student(
-    school: BaseSolutionClient,
+    client: BaseSolutionClient,
     student_id: int,
     **request_kwargs,
 ) -> Response:
@@ -271,13 +271,13 @@ def get_sections_by_student(
     Returns a list of sections for the specified student.
     https://developer.sky.blackbaud.com/docs/services/school/operations/V1AcademicsStudentByStudent_idSectionsGet
     """
-    return school._make_request(
+    return client._make_request(
         "GET", f"academics/student/{student_id}/sections", **request_kwargs
     )
 
 
 def get_special_days(
-    school: BaseSolutionClient,
+    client: BaseSolutionClient,
     school_level_id: Optional[int] = None,
     **request_kwargs,
 ) -> Response:
@@ -285,7 +285,7 @@ def get_special_days(
     Returns a list of special days.
     https://developer.sky.blackbaud.com/docs/services/school/operations/V1AcademicsSpecialdaysGet
     """
-    return school._make_request(
+    return client._make_request(
         "GET",
         "academics/specialdays",
         params={
@@ -296,7 +296,7 @@ def get_special_days(
 
 
 def get_enrollments_by_student(
-    school: BaseSolutionClient,
+    client: BaseSolutionClient,
     user_id: int,
     school_year: Optional[str] = None,
     **request_kwargs,
@@ -305,7 +305,7 @@ def get_enrollments_by_student(
     Returns a list of course sections in which the provided student is enrolled.
     https://developer.sky.blackbaud.com/docs/services/school/operations/V1AcademicsEnrollmentsByUser_idGet
     """
-    return school._make_request(
+    return client._make_request(
         "GET",
         f"academics/enrollments/{user_id}",
         params={
@@ -316,7 +316,7 @@ def get_enrollments_by_student(
 
 
 def get_enrollment_changes(
-    school: BaseSolutionClient,
+    client: BaseSolutionClient,
     start_date: datetime,
     end_date: Optional[datetime] = None,
     **request_kwargs,
@@ -328,7 +328,7 @@ def get_enrollment_changes(
     it will be set to start_date + 30 days.
     https://developer.sky.blackbaud.com/docs/services/school/operations/V1AcademicsEnrollmentsChangesGet
     """
-    return school._make_request(
+    return client._make_request(
         "GET",
         "academics/enrollments/changes",
         params={
@@ -340,7 +340,7 @@ def get_enrollment_changes(
 
 
 def get_students_by_section(
-    school: BaseSolutionClient,
+    client: BaseSolutionClient,
     section_id: int,
     **request_kwargs,
 ) -> Response:
@@ -348,6 +348,6 @@ def get_students_by_section(
     Returns the list of students in the specified section.
     https://developer.sky.blackbaud.com/docs/services/school/operations/V1AcademicsSectionsBySection_idStudentsGet
     """
-    return school._make_request(
+    return client._make_request(
         "GET", f"academics/sections/{section_id}/students", **request_kwargs
     )
