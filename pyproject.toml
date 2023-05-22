@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "blackbaud"
-version = "0.1.0"
+version = "1.0.0-alpha"
 description = "A python module to make the SKY API easier to work with"
 authors = ["Ömer Boratav <oboratav@stjohns.bc.ca>"]
 readme = "README.md"

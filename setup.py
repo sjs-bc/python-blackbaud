@@ -5,7 +5,7 @@ with open("README.md", "r", encoding="utf-8") as f:
 
 setuptools.setup(
     name="blackbaud",
-    version="0.1.0",
+    version="1.0.0-alpha",
     author="Ömer Boratav",
     author_email="oboratav@stjohns.bc.ca",
     description="A python module to make the SKY API easier to work with",
@@ -21,5 +21,16 @@ setuptools.setup(
         "requests-cache[json,redis]",
         "limits",
         "lxml",
+    ],
+    classifiers=[
+        "License :: OSI Approved :: GNU Affero General Public License v3",
+        "Development Status :: 3 - Alpha",
+        "Operating System :: OS Independent",
+        "Programming Language :: Python :: 3 :: Only",
+        "Programming Language :: Python :: 3.9",
+        "Programming Language :: Python :: 3.10",
+        "Programming Language :: Python :: 3.11",
+        "Intended Audience :: Developers",
+        "Topic :: Software Development :: Libraries :: Python Modules",
     ],
 )
