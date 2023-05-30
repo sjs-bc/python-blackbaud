@@ -106,16 +106,20 @@ class SKYAPIClient:
             environment_id=self._environment_id,
         )
         if self._credential_manager.token is not None:
-            self._session.refresh_token(
-                token_url=TOKEN_URL,
-                refresh_token=self._credential_manager.token["refresh_token"],
+            self._credential_manager.update_token(
+                self._session.refresh_token(
+                    token_url=TOKEN_URL,
+                    refresh_token=self._credential_manager.token["refresh_token"],
+                )
             )
         elif authorization_code or authorization_response:
-            self._session.fetch_token(
-                TOKEN_URL,
-                code=authorization_code,
-                authorization_response=authorization_response,
-                client_secret=self._client_secret,
+            self._credential_manager.update_token(
+                self._session.fetch_token(
+                    TOKEN_URL,
+                    code=authorization_code,
+                    authorization_response=authorization_response,
+                    client_secret=self._client_secret,
+                )
             )
 
     def fetch_token(
