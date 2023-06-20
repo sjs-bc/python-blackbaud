@@ -1,4 +1,4 @@
-from typing import Optional
+from typing import Optional, List
 
 from requests import Response
 
@@ -114,8 +114,8 @@ def get_lists(client: BaseSolutionClient, **request_kwargs) -> Response:
 def get_list(
     client: BaseSolutionClient,
     list_id: int,
-    page: Optional[int] = 1,
-    page_size: Optional[int] = 1000,
+    page: int = 1,
+    page_size: int = 1000,
     **request_kwargs,
 ) -> Response:
     """
@@ -131,6 +131,58 @@ def get_list(
         },
         **request_kwargs,
     )
+
+
+def get_full_list(
+    client: BaseSolutionClient,
+    list_id: int,
+    page: int = 1,
+    page_size: int = 1000,
+    **request_kwargs,
+) -> dict:
+    """
+    Recursively fetches all results from a basic or advanced list.
+    https://developer.sky.blackbaud.com/docs/services/school/operations/V1ListsAdvancedByList_idGet
+    """
+    # TODO: Clean this up
+    full_list = {
+        "count": 0,
+        "results": {
+            "rows": [],
+        },
+        "page": page,
+    }
+    current_count = page_size
+
+    while current_count == page_size:
+        print(f"Getting page {full_list['page']}")
+        response = client._make_request(
+            "GET",
+            f"lists/advanced/{list_id}",
+            params={
+                "page": full_list["page"],
+                "page_size": page_size,
+            },
+            **request_kwargs,
+        )
+        full_list["count"] += response.json()["count"]
+        full_list["page"] += 1
+        full_list["results"]["rows"].extend(response.json()["results"]["rows"])
+        print(f"Got {response.json()['count']} results, {full_list['count']} total")
+
+        current_count = response.json()["count"]
+
+    return full_list
+
+
+def convert_advanced_list_to_dicts(advanced_list: dict) -> List[dict]:
+    """
+    Converts an advanced list response to a list of dictionaries.
+    """
+    return [
+        {column["name"]: column.get("value", None) for column in row["columns"]}
+        for row in advanced_list["results"]["rows"]
+    ]
 
 
 def get_directories(client: BaseSolutionClient, **request_kwargs) -> Response:
