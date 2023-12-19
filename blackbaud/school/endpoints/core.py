@@ -145,7 +145,7 @@ def get_lists(client: BaseSolutionClient, **request_kwargs) -> Response:
     return client._make_request("GET", "lists", **request_kwargs)
 
 
-def get_list(
+def get_list_page(
     client: BaseSolutionClient,
     list_id: int,
     page: int = 1,
@@ -153,7 +153,7 @@ def get_list(
     **request_kwargs,
 ) -> Response:
     """
-    Returns a collection of results from a basic or advanced list.
+    Returns a single page of results from a basic or advanced list.
     https://developer.sky.blackbaud.com/docs/services/school/operations/V1ListsAdvancedByList_idGet
     """
     return client._make_request(
@@ -167,7 +167,21 @@ def get_list(
     )
 
 
-def get_full_list(
+def get_list_page_contents(
+    client: BaseSolutionClient,
+    list_id: int,
+    page: int = 1,
+    page_size: int = 1000,
+    **request_kwargs,
+) -> dict:
+    """
+    get_list_page, but returns the contents of the page instead of the response object.
+    https://developer.sky.blackbaud.com/docs/services/school/operations/V1ListsAdvancedByList_idGet
+    """
+    return get_list_page(client, list_id, page, page_size, **request_kwargs).json()
+
+
+def get_full_list_contents(
     client: BaseSolutionClient,
     list_id: int,
     page: int = 1,
@@ -178,7 +192,6 @@ def get_full_list(
     Recursively fetches all results from a basic or advanced list.
     https://developer.sky.blackbaud.com/docs/services/school/operations/V1ListsAdvancedByList_idGet
     """
-    # TODO: Clean this up
     full_list = {
         "count": 0,
         "results": {
@@ -186,10 +199,8 @@ def get_full_list(
         },
         "page": page,
     }
-    current_count = page_size
 
-    while current_count == page_size:
-        print(f"Getting page {full_list['page']}")
+    while True:
         response = client._make_request(
             "GET",
             f"lists/advanced/{list_id}",
@@ -199,12 +210,12 @@ def get_full_list(
             },
             **request_kwargs,
         )
-        full_list["count"] += response.json()["count"]
+        response_json = response.json()
+        full_list["count"] += response_json["count"]
+        full_list["results"]["rows"].extend(response_json["results"]["rows"])
+        if response_json["count"] < page_size:
+            break
         full_list["page"] += 1
-        full_list["results"]["rows"].extend(response.json()["results"]["rows"])
-        print(f"Got {response.json()['count']} results, {full_list['count']} total")
-
-        current_count = response.json()["count"]
 
     return full_list
 
