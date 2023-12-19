@@ -42,7 +42,7 @@ def get_table_values(
             "table_id": table_id,
             "table_name": table_name,
             "include_inactive": include_inactive,
-        }
+        },
         **request_kwargs,
     )
 
