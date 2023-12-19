@@ -294,5 +294,22 @@ class BaseSolutionClient:
 
 
 def paginated_response(func):
+    """
+    A decorator for paginated responses.
+    Given a function that returns a requests.Response object, this decorator will
+    automatically handle pagination and return the full response.
+    """
     def wrapper(*args, **kwargs):
-        func(*args, **kwargs)
+        if not isinstance(args[0], BaseSolutionClient):
+            raise TypeError(
+                "The paginated_response decorator can only be used on methods "
+                "that take a BaseSolutionClient as the first argument."
+            )
+        full_response = func(*args, **kwargs)
+        response = full_response.json()
+        while response.get("next_link") is not None:
+            response = args[0]._make_request("GET", response["next_link"]).json()
+            full_response["value"].extend(response["value"])
+        return full_response
+    return wrapper
+

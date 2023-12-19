@@ -2,15 +2,49 @@ from typing import Optional, List
 
 from requests import Response
 
-from blackbaud.client import BaseSolutionClient
+from blackbaud.client import BaseSolutionClient, paginated_response
 
 
+@paginated_response
 def get_custom_fields(client: BaseSolutionClient, **request_kwargs) -> Response:
     """
     Returns a collection of admin custom fields.
     https://developer.sky.blackbaud.com/docs/services/school/operations/V1CustomfieldsGet
     """
     return client._make_request("GET", "customfields", **request_kwargs)
+
+
+@paginated_response
+def get_tables(client: BaseSolutionClient, **request_kwargs) -> Response:
+    """
+    Returns a collection of custom tables.
+    https://developer.sky.blackbaud.com/docs/services/school/operations/V1TablesGet
+    """
+    return client._make_request("GET", "types/tables", **request_kwargs)
+
+
+@paginated_response
+def get_table_values(
+    client: BaseSolutionClient,
+    table_id: Optional[int] = None,
+    table_name: Optional[str] = None,
+    include_inactive: Optional[bool] = None,
+    **request_kwargs,
+) -> Response:
+    """
+    Returns a collection of custom table values.
+    https://developer.sky.blackbaud.com/api#api=school&operation=V1TypesTablevaluesGet
+    """
+    return client._make_request(
+        "GET",
+        "types/tablevalues",
+        params={
+            "table_id": table_id,
+            "table_name": table_name,
+            "include_inactive": include_inactive,
+        }
+        **request_kwargs,
+    )
 
 
 def get_grade_levels(client: BaseSolutionClient, **request_kwargs) -> Response:
