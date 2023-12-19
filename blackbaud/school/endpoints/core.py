@@ -39,9 +39,9 @@ def get_table_values(
         "GET",
         "types/tablevalues",
         params={
-            "table_id": table_id,
-            "table_name": table_name,
-            "include_inactive": include_inactive,
+            "tableId": table_id,
+            "tableName": table_name,
+            "includeInactive": include_inactive,
         },
         **request_kwargs,
     )
