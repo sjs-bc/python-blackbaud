@@ -5,7 +5,7 @@ from typing import Iterable, Optional, TypedDict, Union
 
 from requests import Response
 
-from blackbaud.client import BaseSolutionClient
+from blackbaud.client import BaseSolutionClient, paginated_response
 
 
 def get_self(
@@ -43,6 +43,7 @@ def get_user_by_id_details(
     return client._make_request("GET", f"users/extended/{user_id}", **request_kwargs)
 
 
+@paginated_response
 def get_users_by_roles(
     client: BaseSolutionClient,
     role_ids: Iterable[int],
@@ -76,6 +77,7 @@ def get_users_by_roles(
     )
 
 
+@paginated_response
 def get_users_by_roles_detailed(
     client: BaseSolutionClient,
     role_ids: Iterable[int],
@@ -864,45 +866,65 @@ class RelationshipType(Enum):
     Enum for relationship types.
     """
 
-    NOT_SET = "NOT_SET"
+    NOT_SET = "NOT_SET", None
+    OTHER = "Other", 10
 
-    FRIEND = "Friend_Friend"
-    ASSOCIATE = "Associate_Associate"
-    CONSULTANT = "Consultant_Student"
+    FRIEND = "Friend_Friend", 60
+    ASSOCIATE = "Associate_Associate", 54
+    CONSULTANT = "Consultant_Student", 8
+    CONSULTANT_STUDENT = "Consultant_Student", 8
 
-    CUSTODIAN = "Custodian_Student"
-    GUARDIAN = "Guardian_Ward"
-    CARETAKER = "Caretaker_Charge"
+    CUSTODIAN = "Custodian_Student", 7
+    CUSTODIAN_STUDENT = "Custodian_Student", 7
+    GUARDIAN = "Guardian_Ward", 3
+    WARD = "Guardian_Ward", 3
+    CARETAKER = "Caretaker_Charge", 9
+    CHARGE = "Caretaker_Charge", 9
 
-    AUNT = "AuntUncle_NieceNephew"
-    UNCLE = "AuntUncle_NieceNephew"
-    COUSIN = "Cousin_Cousin"
+    AUNT = "AuntUncle_NieceNephew", 4
+    UNCLE = "AuntUncle_NieceNephew", 4
+    NIECE = "AuntUncle_NieceNephew", 4
+    NEPHEW = "AuntUncle_NieceNephew", 4
+    COUSIN = "Cousin_Cousin", 59
 
-    SPOUSE = "Spouse_Spouse"
-    SPOUSE_PARTNER = "SpousePartner_SpousePartner"
-    HUSBAND = "Husband_Wife"
-    WIFE = "Husband_Wife"
-    EX_SPOUSE = "ExHusband_ExWife"
-    EX_HUSBAND = "ExHusband_ExWife"
-    EX_WIFE = "ExHusband_ExWife"
+    SPOUSE = "Spouse_Spouse", 57
+    SPOUSE_PARTNER = "SpousePartner_SpousePartner", 51
 
-    STEP_PARENT = "StepParent_StepChild"
-    STEP_FATHER = "StepParent_StepChild"
-    STEP_MOTHER = "StepParent_StepChild"
-    STEP_SIBLING = "StepSibling_StepSibling"
-    STEP_BROTHER = "StepSibling_StepSibling"
-    STEP_SISTER = "StepSibling_StepSibling"
-    HALF_SIBLING = "HalfSibling_HalfSibling"
-    HALF_BROTHER = "HalfSibling_HalfSibling"
-    HALF_SISTER = "HalfSibling_HalfSibling"
+    HUSBAND = "Husband_Wife", 56
+    WIFE = "Husband_Wife", 56
+    EX_HUSBAND = "ExHusband_ExWife", 53
+    EX_WIFE = "ExHusband_ExWife", 53
 
-    GRANDPARENT = "Grandparent_Grandchild"
-    GRANDFATHER = "Grandparent_Grandchild"
-    GRANDMOTHER = "Grandparent_Grandchild"
+    PARENT = "Parent_Child", 6
+    FATHER = "Parent_Child", 6
+    MOTHER = "Parent_Child", 6
+    CHILD = "Parent_Child", 6
 
-    GREAT_GRANDPARENT = "GrGrandParent_GrGrandChild"
-    GREAT_GRANDFATHER = "GrGrandParent_GrGrandChild"
-    GREAT_GRANDMOTHER = "GrGrandParent_GrGrandChild"
+    SIBLING = "Sibling_Sibling", 58
+    BROTHER = "Sibling_Sibling", 58
+    SISTER = "Sibling_Sibling", 58
+    STEP_PARENT = "StepParent_StepChild", 1
+    STEP_FATHER = "StepParent_StepChild", 1
+    STEP_MOTHER = "StepParent_StepChild", 1
+    STEP_CHILD = "StepParent_StepChild", 1
+    STEP_SIBLING = "StepSibling_StepSibling", 52
+    STEP_BROTHER = "StepSibling_StepSibling", 52
+    STEP_SISTER = "StepSibling_StepSibling", 52
+    HALF_SIBLING = "HalfSibling_HalfSibling", 55
+    HALF_BROTHER = "HalfSibling_HalfSibling", 55
+    HALF_SISTER = "HalfSibling_HalfSibling", 55
+
+    GRANDPARENT = "Grandparent_Grandchild", 5
+    GRANDFATHER = "Grandparent_Grandchild", 5
+    GRANDMOTHER = "Grandparent_Grandchild", 5
+
+    GREAT_GRANDPARENT = "GrGrandParent_GrGrandChild", 2
+    GREAT_GRANDFATHER = "GrGrandParent_GrGrandChild", 2
+    GREAT_GRANDMOTHER = "GrGrandParent_GrGrandChild", 2
+
+    def __init__(self, label, type_id):
+        self.label = label
+        self.type_id = type_id
 
 
 def create_user_relationship(
