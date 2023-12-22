@@ -1,3 +1,6 @@
+from typing import Iterator
+
+
 class BlackbaudResource(object):
     ...
 
@@ -18,8 +21,17 @@ class BlackbaudPage(BlackbaudResource):
 
     BlackbaudCollection > BlackbaudPage > BlackbaudObject
     """
+    def __init__(self, url, text) -> None:
+        ...
 
-    ...
+    def __iter__(self) -> Iterator[BlackbaudObject]:
+        ...
+
+    def __next__(self) -> BlackbaudObject:
+        ...
+    
+    def __getitem__(self, index) -> BlackbaudObject:
+        ...
 
 
 class BlackbaudCollection(BlackbaudResource):
