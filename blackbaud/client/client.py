@@ -297,19 +297,35 @@ def paginated_response(func):
     """
     A decorator for paginated responses.
     Given a function that returns a requests.Response object, this decorator will
-    automatically handle pagination and return the full response.
+    automatically handle pagination and return the full response as a dict.
     """
-    def wrapper(*args, **kwargs):
+
+    def wrapper(*args, **kwargs) -> requests.Response:
         if not isinstance(args[0], BaseSolutionClient):
             raise TypeError(
                 "The paginated_response decorator can only be used on methods "
                 "that take a BaseSolutionClient as the first argument."
             )
-        full_response = func(*args, **kwargs)
-        response = full_response.json()
-        while response.get("next_link") is not None:
-            response = args[0]._make_request("GET", response["next_link"]).json()
-            full_response["value"].extend(response["value"])
-        return full_response
-    return wrapper
+        initial_response = func(*args, **kwargs)
+        initial_response.raise_for_status()
+        initial_response.full_json = initial_response.json()
+        initial_response.pages = [initial_response.full_json]
 
+        while initial_response.full_json.get("next_link") is not None:
+            subsequent_response = (
+                args[0]
+                ._make_request("GET", initial_response.full_json["next_link"])
+                .json()
+            )
+            subsequent_response.raise_for_status()
+            initial_response.pages.append(subsequent_response.json())
+            initial_response.full_json["value"].extend(subsequent_response["value"])
+            initial_response.full_json["next_link"] = subsequent_response.get(
+                "next_link"
+            )
+
+        initial_response.full_json["count"] = len(initial_response.full_json["value"])
+
+        return initial_response
+
+    return wrapper
