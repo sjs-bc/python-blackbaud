@@ -96,7 +96,7 @@ class SKYAPIClient:
             },
             token_updater=self._credential_manager.update_token,
             cache_name=cache_name,
-            cache_backend=cache_backend,
+            backend=cache_backend,
             expire_after=cache_default_expiry,
         )
         self._state = str(self._session.new_state())
