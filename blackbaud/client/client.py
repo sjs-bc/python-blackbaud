@@ -311,11 +311,10 @@ def paginated_response(func):
         initial_response.full_json = initial_response.json()
         initial_response.pages = [initial_response.full_json]
 
-        while initial_response.full_json.get("next_link") is not None:
+        while initial_response.full_json.get("next_link"):
             subsequent_response = (
                 args[0]
                 ._make_request("GET", initial_response.full_json["next_link"])
-                .json()
             )
             subsequent_response.raise_for_status()
             initial_response.pages.append(subsequent_response.json())
