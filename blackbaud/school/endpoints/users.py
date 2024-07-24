@@ -179,39 +179,42 @@ def create_user(
     Creates a user. Returns the new user's User ID.
     https://developer.sky.blackbaud.com/docs/services/school/operations/V1UsersPost
     """
+
+    data = {
+        "affiliation": affiliation,
+        "prefix": prefix,
+        "first_name": first_name,
+        "preferred_name": preferred_name,
+        "middle_name": middle_name,
+        "last_name": last_name,
+        "preferred_lastname": preferred_last_name,
+        "maiden_name": maiden_name,
+        "suffix": suffix,
+        "greeting": greeting,
+        "gender": gender,
+        "pronouns": pronouns,
+        "birth_date": birth_date.isoformat() if birth_date else None,
+        "deceased": deceased,
+        "email": email,
+        "email_active": email_active,
+        "host_id": host_id,
+        "lost": lost,
+        "custom_field_one": custom_field_one,
+        "custom_field_two": custom_field_two,
+        "custom_field_three": custom_field_three,
+        "custom_field_four": custom_field_four,
+        "custom_field_five": custom_field_five,
+        "custom_field_six": custom_field_six,
+        "custom_field_seven": custom_field_seven,
+        "custom_field_eight": custom_field_eight,
+        "custom_field_nine": custom_field_nine,
+        "custom_field_ten": custom_field_ten,
+    }
+
     return client._make_request(
         "POST",
         "users",
-        data={
-            "affiliation": affiliation,
-            "prefix": prefix,
-            "first_name": first_name,
-            "preferred_name": preferred_name,
-            "middle_name": middle_name,
-            "last_name": last_name,
-            "preferred_lastname": preferred_last_name,
-            "maiden_name": maiden_name,
-            "suffix": suffix,
-            "greeting": greeting,
-            "gender": gender,
-            "pronouns": pronouns,
-            "birth_date": birth_date.isoformat() if birth_date else None,
-            "deceased": deceased,
-            "email": email,
-            "email_active": email_active,
-            "host_id": host_id,
-            "lost": lost,
-            "custom_field_one": custom_field_one,
-            "custom_field_two": custom_field_two,
-            "custom_field_three": custom_field_three,
-            "custom_field_four": custom_field_four,
-            "custom_field_five": custom_field_five,
-            "custom_field_six": custom_field_six,
-            "custom_field_seven": custom_field_seven,
-            "custom_field_eight": custom_field_eight,
-            "custom_field_nine": custom_field_nine,
-            "custom_field_ten": custom_field_ten,
-        },
+        data={k: v for k, v in data.items() if v is not None},
         **request_kwargs,
     )
 
@@ -254,41 +257,43 @@ def update_user(
     Updates a user.
     https://developer.sky.blackbaud.com/docs/services/school/operations/V1UsersPatch
     """
+    data = {
+        "id": user_id,
+        "affiliation": affiliation,
+        "prefix": prefix,
+        "first_name": first_name,
+        "preferred_name": preferred_name,
+        "middle_name": middle_name,
+        "last_name": last_name,
+        "preferred_lastname": preferred_last_name,
+        "maiden_name": maiden_name,
+        "suffix": suffix,
+        "greeting": greeting,
+        "gender": gender,
+        "pronouns": pronouns,
+        "birth_date": birth_date.isoformat() if birth_date else None,
+        "deceased": deceased,
+        "email": email,
+        "email_active": email_active,
+        "host_id": host_id,
+        "lost": lost,
+        "custom_field_one": custom_field_one,
+        "custom_field_two": custom_field_two,
+        "custom_field_three": custom_field_three,
+        "custom_field_four": custom_field_four,
+        "custom_field_five": custom_field_five,
+        "custom_field_six": custom_field_six,
+        "custom_field_seven": custom_field_seven,
+        "custom_field_eight": custom_field_eight,
+        "custom_field_nine": custom_field_nine,
+        "custom_field_ten": custom_field_ten,
+        "fields_to_delete": fields_to_delete,
+    }
+
     return client._make_request(
         "PATCH",
         "users",
-        data={
-            "id": user_id,
-            "affiliation": affiliation,
-            "prefix": prefix,
-            "first_name": first_name,
-            "preferred_name": preferred_name,
-            "middle_name": middle_name,
-            "last_name": last_name,
-            "preferred_lastname": preferred_last_name,
-            "maiden_name": maiden_name,
-            "suffix": suffix,
-            "greeting": greeting,
-            "gender": gender,
-            "pronouns": pronouns,
-            "birth_date": birth_date.isoformat() if birth_date else None,
-            "deceased": deceased,
-            "email": email,
-            "email_active": email_active,
-            "host_id": host_id,
-            "lost": lost,
-            "custom_field_one": custom_field_one,
-            "custom_field_two": custom_field_two,
-            "custom_field_three": custom_field_three,
-            "custom_field_four": custom_field_four,
-            "custom_field_five": custom_field_five,
-            "custom_field_six": custom_field_six,
-            "custom_field_seven": custom_field_seven,
-            "custom_field_eight": custom_field_eight,
-            "custom_field_nine": custom_field_nine,
-            "custom_field_ten": custom_field_ten,
-            "fields_to_delete": fields_to_delete,
-        },
+        data={k: v for k, v in data.items() if v is not None},
         **request_kwargs,
     )
 
@@ -322,24 +327,27 @@ def create_user_address(
     Creates an address for a user. Returns the ID of the address created.
     https://developer.sky.blackbaud.com/docs/services/school/operations/V1UsersByUser_idAddressesPost
     """
+
+    data = {
+        "user_id": user_id,
+        "type_id": address_type,
+        "country": country,
+        "line_one": line_one,
+        "line_two": line_two,
+        "line_three": line_three,
+        "city": city,
+        "state": state,
+        "postal_code": postal_code,
+        "province": province,
+        "region": region,
+        "mailing_address": is_mailing_address,
+        "primary": is_primary_address,
+    }
+
     return client._make_request(
         "POST",
         f"users/{user_id}/addresses",
-        data={
-            "user_id": user_id,
-            "type_id": address_type,
-            "country": country,
-            "line_one": line_one,
-            "line_two": line_two,
-            "line_three": line_three,
-            "city": city,
-            "state": state,
-            "postal_code": postal_code,
-            "province": province,
-            "region": region,
-            "mailing_address": is_mailing_address,
-            "primary": is_primary_address,
-        },
+        data={k: v for k, v in data.items() if v is not None},
         **request_kwargs,
     )
 
@@ -367,26 +375,29 @@ def update_user_address(
     Updates an address for a user.
     https://developer.sky.blackbaud.com/docs/services/school/operations/V1UsersByUser_idAddressesByAddress_idPatch
     """
+
+    data = {
+        "id": address_id,
+        "user_id": user_id,
+        "type_id": address_type,
+        "country": country,
+        "line_one": line_one,
+        "line_two": line_two,
+        "line_three": line_three,
+        "city": city,
+        "state": state,
+        "postal_code": postal_code,
+        "province": province,
+        "region": region,
+        "mailing_address": is_mailing_address,
+        "primary": is_primary_address,
+        "links": links,
+    }
+
     return client._make_request(
         "PATCH",
         f"users/{user_id}/addresses/{address_id}",
-        data={
-            "id": address_id,
-            "user_id": user_id,
-            "type_id": address_type,
-            "country": country,
-            "line_one": line_one,
-            "line_two": line_two,
-            "line_three": line_three,
-            "city": city,
-            "state": state,
-            "postal_code": postal_code,
-            "province": province,
-            "region": region,
-            "mailing_address": is_mailing_address,
-            "primary": is_primary_address,
-            "links": links,
-        },
+        data={k: v for k, v in data.items() if v is not None},
         **request_kwargs,
     )
 
@@ -789,25 +800,28 @@ def create_user_occupation(
     Creates an occupation for the given user.
     https://developer.sky.blackbaud.com/docs/services/school/operations/V1UsersByUser_idOccupationsPost
     """
+
+    data = {
+        "business_name": business_name,
+        "job_title": job_title,
+        "business_url": business_url,
+        "industry": industry,
+        "organization": organization,
+        "occupation": occupation,
+        "matching_gift": matching_gift,
+        "begin_date": start_date.date().isoformat() if start_date else None,
+        "end_date": end_date.date().isoformat() if end_date else None,
+        "specialty": specialty,
+        "parent_company": parent_company,
+        "job_function": job_function,
+        "years_employed": years_employed,
+        "current": current,
+    }
+
     return client._make_request(
         "POST",
         f"users/{user_id}/occupations",
-        data={
-            "business_name": business_name,
-            "job_title": job_title,
-            "business_url": business_url,
-            "industry": industry,
-            "organization": organization,
-            "occupation": occupation,
-            "matching_gift": matching_gift,
-            "begin_date": start_date.date().isoformat() if start_date else None,
-            "end_date": end_date.date().isoformat() if end_date else None,
-            "specialty": specialty,
-            "parent_company": parent_company,
-            "job_function": job_function,
-            "years_employed": years_employed,
-            "current": current,
-        },
+        data={k: v for k, v in data.items() if v is not None},
         **request_kwargs,
     )
 
@@ -836,25 +850,28 @@ def update_user_occupation(
     Updates an occupation for the given user.
     https://developer.sky.blackbaud.com/docs/services/school/operations/V1UsersByUser_idOccupationsByOccupation_idPatch
     """
+
+    data = {
+        "business_name": business_name,
+        "job_title": job_title,
+        "business_url": business_url,
+        "industry": industry,
+        "organization": organization,
+        "occupation": occupation,
+        "matching_gift": matching_gift,
+        "begin_date": start_date.date().isoformat() if start_date else None,
+        "end_date": end_date.date().isoformat() if end_date else None,
+        "specialty": specialty,
+        "parent_company": parent_company,
+        "job_function": job_function,
+        "years_employed": years_employed,
+        "currently_employed": current,
+    }
+
     return client._make_request(
         "PATCH",
         f"users/{user_id}/occupations/{occupation_id}",
-        data={
-            "business_name": business_name,
-            "job_title": job_title,
-            "business_url": business_url,
-            "industry": industry,
-            "organization": organization,
-            "occupation": occupation,
-            "matching_gift": matching_gift,
-            "begin_date": start_date.date().isoformat() if start_date else None,
-            "end_date": end_date.date().isoformat() if end_date else None,
-            "specialty": specialty,
-            "parent_company": parent_company,
-            "job_function": job_function,
-            "years_employed": years_employed,
-            "currently_employed": current,
-        }
+        data={k: v for k, v in data.items() if v is not None},
     )
 
 
