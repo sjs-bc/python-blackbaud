@@ -172,6 +172,7 @@ class SKYAPIClient:
         headers.update(
             {
                 "Bb-Api-Subscription-Key": self._subscription_key,
+                "Content-Type": "application/json",
             }
         )
 
