@@ -1,6 +1,7 @@
 from datetime import date, datetime
 from decimal import Decimal
 from enum import Enum
+import json
 from typing import Iterable, List, Optional, Union
 
 from requests import Response
@@ -293,7 +294,7 @@ def update_user(
     return client._make_request(
         "PATCH",
         "users",
-        data={k: v for k, v in data.items() if v is not None},
+        data=json.dumps({k: v for k, v in data.items() if v is not None}),
         **request_kwargs,
     )
 
@@ -347,7 +348,7 @@ def create_user_address(
     return client._make_request(
         "POST",
         f"users/{user_id}/addresses",
-        data={k: v for k, v in data.items() if v is not None},
+        data=json.dumps({k: v for k, v in data.items() if v is not None}),
         **request_kwargs,
     )
 
@@ -397,7 +398,7 @@ def update_user_address(
     return client._make_request(
         "PATCH",
         f"users/{user_id}/addresses/{address_id}",
-        data={k: v for k, v in data.items() if v is not None},
+        data=json.dumps({k: v for k, v in data.items() if v is not None}),
         **request_kwargs,
     )
 
@@ -821,7 +822,7 @@ def create_user_occupation(
     return client._make_request(
         "POST",
         f"users/{user_id}/occupations",
-        data={k: v for k, v in data.items() if v is not None},
+        data=json.dumps({k: v for k, v in data.items() if v is not None}),
         **request_kwargs,
     )
 
@@ -871,7 +872,7 @@ def update_user_occupation(
     return client._make_request(
         "PATCH",
         f"users/{user_id}/occupations/{occupation_id}",
-        data={k: v for k, v in data.items() if v is not None},
+        data=json.dumps({k: v for k, v in data.items() if v is not None}),
     )
 
 
