@@ -11,7 +11,7 @@ python = "^3.9"
 requests = "^2.31.0"
 requests-oauthlib = "^1.3.1"
 limits = "^2.7.1"
-lxml = "^4.9.2"
+lxml = "^5.2"
 requests-cache = {extras = ["json", "redis"], version = "^1.0.1"}
 
 [tool.poetry.group.dev.dependencies]
