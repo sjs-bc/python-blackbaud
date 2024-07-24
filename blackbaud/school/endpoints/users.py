@@ -1,7 +1,7 @@
 from datetime import date, datetime
-from enum import Enum
 from decimal import Decimal
-from typing import Iterable, Optional, TypedDict, Union
+from enum import Enum
+from typing import Iterable, List, Optional, Union
 
 from requests import Response
 
@@ -151,10 +151,12 @@ def create_user(
     preferred_name: Optional[str] = None,
     middle_name: Optional[str] = None,
     last_name: Optional[str] = None,
+    preferred_last_name: Optional[str] = None,
     maiden_name: Optional[str] = None,
     suffix: Optional[str] = None,
     greeting: Optional[str] = None,
     gender: Optional[str] = None,
+    pronouns: Optional[str] = None,
     birth_date: Optional[datetime] = None,
     deceased: Optional[bool] = None,
     email: Optional[str] = None,
@@ -187,10 +189,12 @@ def create_user(
             "preferred_name": preferred_name,
             "middle_name": middle_name,
             "last_name": last_name,
+            "preferred_lastname": preferred_last_name,
             "maiden_name": maiden_name,
             "suffix": suffix,
             "greeting": greeting,
             "gender": gender,
+            "pronouns": pronouns,
             "birth_date": birth_date.isoformat() if birth_date else None,
             "deceased": deceased,
             "email": email,
@@ -221,10 +225,12 @@ def update_user(
     preferred_name: Optional[str] = None,
     middle_name: Optional[str] = None,
     last_name: Optional[str] = None,
+    preferred_last_name: Optional[str] = None,
     maiden_name: Optional[str] = None,
     suffix: Optional[str] = None,
     greeting: Optional[str] = None,
     gender: Optional[str] = None,
+    pronouns: Optional[str] = None,
     birth_date: Optional[datetime] = None,
     deceased: Optional[bool] = None,
     email: Optional[str] = None,
@@ -241,6 +247,7 @@ def update_user(
     custom_field_eight: Optional[str] = None,
     custom_field_nine: Optional[str] = None,
     custom_field_ten: Optional[str] = None,
+    fields_to_delete: Optional[List[str]] = None,
     **request_kwargs,
 ) -> Response:
     """
@@ -258,10 +265,12 @@ def update_user(
             "preferred_name": preferred_name,
             "middle_name": middle_name,
             "last_name": last_name,
+            "preferred_lastname": preferred_last_name,
             "maiden_name": maiden_name,
             "suffix": suffix,
             "greeting": greeting,
             "gender": gender,
+            "pronouns": pronouns,
             "birth_date": birth_date.isoformat() if birth_date else None,
             "deceased": deceased,
             "email": email,
@@ -278,6 +287,7 @@ def update_user(
             "custom_field_eight": custom_field_eight,
             "custom_field_nine": custom_field_nine,
             "custom_field_ten": custom_field_ten,
+            "fields_to_delete": fields_to_delete,
         },
         **request_kwargs,
     )
@@ -350,7 +360,7 @@ def update_user_address(
     region: Optional[str] = None,
     is_mailing_address: Optional[bool] = None,
     is_primary_address: Optional[bool] = None,
-    links: Optional[Iterable[TypedDict]] = None,
+    links: Optional[Iterable[dict]] = None,
     **request_kwargs,
 ) -> Response:
     """
@@ -798,6 +808,71 @@ def create_user_occupation(
             "years_employed": years_employed,
             "current": current,
         },
+        **request_kwargs,
+    )
+
+
+def update_user_occupation(
+    client: BaseSolutionClient,
+    user_id: int,
+    occupation_id: int,
+    business_name: Optional[str] = None,
+    job_title: Optional[str] = None,
+    business_url: Optional[str] = None,
+    industry: Optional[str] = None,
+    organization: Optional[str] = None,
+    occupation: Optional[str] = None,
+    matching_gift: Optional[str] = None,
+    start_date: Optional[datetime] = None,
+    end_date: Optional[datetime] = None,
+    specialty: Optional[str] = None,
+    parent_company: Optional[str] = None,
+    job_function: Optional[str] = None,
+    years_employed: Optional[int] = None,
+    current: Optional[bool] = None,
+    **request_kwargs,
+) -> Response:
+    """
+    Updates an occupation for the given user.
+    https://developer.sky.blackbaud.com/docs/services/school/operations/V1UsersByUser_idOccupationsByOccupation_idPatch
+    """
+    return client._make_request(
+        "PATCH",
+        f"users/{user_id}/occupations/{occupation_id}",
+        data={
+            "business_name": business_name,
+            "job_title": job_title,
+            "business_url": business_url,
+            "industry": industry,
+            "organization": organization,
+            "occupation": occupation,
+            "matching_gift": matching_gift,
+            "begin_date": start_date.date().isoformat() if start_date else None,
+            "end_date": end_date.date().isoformat() if end_date else None,
+            "specialty": specialty,
+            "parent_company": parent_company,
+            "job_function": job_function,
+            "years_employed": years_employed,
+            "currently_employed": current,
+        }
+    )
+
+
+def delete_user_occupation(
+    client: BaseSolutionClient,
+    user_id: int,
+    occupation_id: int,
+    current: Optional[bool] = None,
+    **request_kwargs,
+) -> Response:
+    """
+    Deletes an occupation for the given user.
+    https://developer.sky.blackbaud.com/docs/services/school/operations/V1UsersByUser_idOccupationsByOccupation_idDelete
+    """
+    return client._make_request(
+        "DELETE",
+        f"users/{user_id}/occupations/{occupation_id}",
+        params={"current": current},
         **request_kwargs,
     )
 
