@@ -215,7 +215,7 @@ def create_user(
     return client._make_request(
         "POST",
         "users",
-        data={k: v for k, v in data.items() if v is not None},
+        data=json.dumps({k: v for k, v in data.items() if v is not None}),
         **request_kwargs,
     )
 
