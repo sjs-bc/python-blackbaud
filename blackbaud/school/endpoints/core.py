@@ -210,12 +210,14 @@ def get_full_list_contents(
             },
             **request_kwargs,
         )
+        response.raise_for_status()
         response_json = response.json()
-        full_list["count"] += response_json["count"]
-        full_list["results"]["rows"].extend(response_json["results"]["rows"])
-        if response_json["count"] < page_size:
-            break
-        full_list["page"] += 1
+        if isinstance(response_json, dict):
+            full_list["count"] += response_json["count"]
+            full_list["results"]["rows"].extend(response_json["results"]["rows"])
+            if response_json["count"] < page_size:
+                break
+            full_list["page"] += 1
 
     return full_list
 
