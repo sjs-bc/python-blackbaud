@@ -940,6 +940,35 @@ def create_user_phone(
     )
 
 
+def update_user_phone(
+    client: BaseSolutionClient,
+    user_id: int,
+    phone_id: int,
+    split_phone_if_shared: Optional[bool] = None,
+    phone_type_id: Optional[int] = None,
+    phone_number: Optional[str] = None,
+    **request_kwargs,
+    ) -> Response:
+    """
+    Updates a phone for the given user.
+    https://developer.sky.blackbaud.com/docs/services/school/operations/V1UsersByUser_idPhonesByPhone_idPatch
+    """
+    if not any([split_phone_if_shared, phone_type_id, phone_number]):
+        raise ValueError("At least one parameter must be provided")
+
+    return client._make_request(
+        "PATCH",
+        f"users/{user_id}/phones/{phone_id}",
+        data={
+            "split_phone_if_shared": split_phone_if_shared,
+            "phone_type_id": phone_type_id,
+            "phone_number": phone_number,
+        },
+        params={"split_phone_if_shared": split_phone_if_shared},
+        **request_kwargs,
+    )
+
+
 def get_user_relationships(
     client: BaseSolutionClient,
     user_id: int,
