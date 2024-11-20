@@ -961,8 +961,8 @@ def update_user_phone(
         f"users/{user_id}/phones/{phone_id}",
         data={
             "split_phone_if_shared": split_phone_if_shared,
-            "phone_type_id": phone_type_id,
-            "phone_number": phone_number,
+            "type_id": phone_type_id,
+            "number": phone_number,
         },
         params={"split_phone_if_shared": split_phone_if_shared},
         **request_kwargs,
