@@ -933,8 +933,8 @@ def create_user_phone(
         "POST",
         f"users/{user_id}/phones",
         data={
-            "phone_type_id": phone_type_id,
-            "phone_number": phone_number,
+            "type_id": phone_type_id,
+            "number": phone_number,
         },
         **request_kwargs,
     )
