@@ -963,7 +963,8 @@ def update_user_phone(
             "type_id": phone_type_id,
             "number": phone_number,
         }),
-        params={"split_phone_if_shared": split_phone_if_shared},
+        params={"split_phone_if_shared": split_phone_if_shared} 
+        if split_phone_if_shared is not None else None,
         **request_kwargs,
     )
 
