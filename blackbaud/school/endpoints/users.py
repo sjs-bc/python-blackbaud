@@ -932,10 +932,10 @@ def create_user_phone(
     return client._make_request(
         "POST",
         f"users/{user_id}/phones",
-        data={
+        data=json.dumps({
             "type_id": phone_type_id,
             "number": phone_number,
-        },
+        }),
         **request_kwargs,
     )
 
@@ -959,11 +959,10 @@ def update_user_phone(
     return client._make_request(
         "PATCH",
         f"users/{user_id}/phones/{phone_id}",
-        data={
-            "split_phone_if_shared": split_phone_if_shared,
+        data=json.dumps({
             "type_id": phone_type_id,
             "number": phone_number,
-        },
+        }),
         params={"split_phone_if_shared": split_phone_if_shared},
         **request_kwargs,
     )
