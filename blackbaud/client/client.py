@@ -42,6 +42,7 @@ class SKYAPIClient:
         cache_default_expiry: Union[int, float, str, datetime, timedelta] = timedelta(
             hours=1
         ),
+        token_refresh_disabled: bool = False,
     ):
         """
         Construct a new SKY API Client object.
@@ -83,17 +84,18 @@ class SKYAPIClient:
         self.logger = logger
         self._rate_limiter = rate_limiter
         self._rate_limits = rate_limits
+        self._token_refresh_disabled = token_refresh_disabled
 
         self._session = CachedOAuth2Session(
             client_id=self._client_id,
             redirect_uri=self._redirect_uri,
             token=self._credential_manager.token,
             state=self._state,
-            auto_refresh_url=TOKEN_URL,
+            auto_refresh_url=TOKEN_URL if not self._token_refresh_disabled else None,
             auto_refresh_kwargs={
                 "client_id": self._client_id,
                 "client_secret": self._client_secret,
-            },
+            } if not self._token_refresh_disabled else None,
             token_updater=self._credential_manager.update_token,
             cache_name=cache_name,
             backend=cache_backend,
