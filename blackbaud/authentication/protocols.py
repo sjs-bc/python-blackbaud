@@ -24,3 +24,4 @@ class CredentialManager(Protocol):
         """
         Get the token.
         """
+        ...

@@ -6,6 +6,7 @@ import requests
 from limits import RateLimitItem
 from limits.strategies import MovingWindowRateLimiter, RateLimiter
 from requests_cache.backends import BackendSpecifier
+from oauthlib.oauth2 import TokenExpiredError
 
 from blackbaud.authentication.managers import MemoryCredentialManager
 from blackbaud.authentication.protocols import CredentialManager
@@ -21,6 +22,31 @@ class SKYAPIClient:
     """
     A client for the SKY API.
     """
+
+    def create_session(self):
+        self._session = CachedOAuth2Session(
+            client_id=self._client_id,
+            redirect_uri=self._redirect_uri,
+            token=self._credential_manager.token,
+            state=self._state,
+            auto_refresh_url=TOKEN_URL if not self._token_refresh_disabled else None,
+            auto_refresh_kwargs={
+                "client_id": self._client_id,
+                "client_secret": self._client_secret,
+            } if not self._token_refresh_disabled else None,
+            token_updater=self._credential_manager.update_token,
+            cache_name=self._cache_name,
+            backend=self._cache_backend,
+            expire_after=self._cache_default_expiry,
+        )
+        if not self._token_refresh_disabled:
+            self._state = str(self._session.new_state())
+            self._authorization_url, _ = self._session.authorization_url(
+                AUTHORIZATION_URL,
+                state=self._state,
+                environment_id=self._environment_id,
+            )
+
 
     def __init__(
         self,
@@ -84,29 +110,16 @@ class SKYAPIClient:
         self.logger = logger
         self._rate_limiter = rate_limiter
         self._rate_limits = rate_limits
+        self._cache_name = cache_name
+        self._cache_backend = cache_backend
+        self._cache_default_expiry = cache_default_expiry
         self._token_refresh_disabled = token_refresh_disabled
 
-        self._session = CachedOAuth2Session(
-            client_id=self._client_id,
-            redirect_uri=self._redirect_uri,
-            token=self._credential_manager.token,
-            state=self._state,
-            auto_refresh_url=TOKEN_URL if not self._token_refresh_disabled else None,
-            auto_refresh_kwargs={
-                "client_id": self._client_id,
-                "client_secret": self._client_secret,
-            } if not self._token_refresh_disabled else None,
-            token_updater=self._credential_manager.update_token,
-            cache_name=cache_name,
-            backend=cache_backend,
-            expire_after=cache_default_expiry,
-        )
-        self._state = str(self._session.new_state())
-        self._authorization_url, _ = self._session.authorization_url(
-            AUTHORIZATION_URL,
-            state=self._state,
-            environment_id=self._environment_id,
-        )
+        if self._credential_manager.token is not None and self._token_refresh_disabled:
+            raise ValueError("A token is needed if refresh is disabled")
+
+        self.create_session()
+
         if self._credential_manager.token is not None:
             self._credential_manager.update_token(
                 self._session.refresh_token(
@@ -185,14 +198,28 @@ class SKYAPIClient:
             for limit in self._rate_limits:
                 self._rate_limiter.hit(limit, self._subscription_key)
 
-        return self._session.request(
-            method,
-            url,
-            headers=headers,
-            data=data,
-            withhold_token=withhold_token,
-            **kwargs,
-        )
+        try:
+            return self._session.request(
+                method,
+                url,
+                headers=headers,
+                data=data,
+                withhold_token=withhold_token,
+                **kwargs,
+            )
+        except TokenExpiredError:
+            # Credential has expired. If this error is showing up here, we need to get a new token externally.
+            if self._token_refresh_disabled:
+                self.create_session()
+            else:
+                self._credential_manager.update_token(
+                    self._session.refresh_token(
+                        token_url=TOKEN_URL,
+                        refresh_token=self._credential_manager.token["refresh_token"],
+                    )
+                )
+
+
 
     @property
     def authorization_url(self) -> str:
