@@ -115,19 +115,32 @@ class SKYAPIClient:
         self._cache_default_expiry = cache_default_expiry
         self._token_refresh_disabled = token_refresh_disabled
 
-        if self._credential_manager.token is not None and self._token_refresh_disabled:
-            raise ValueError("A token is needed if refresh is disabled")
+        has_token = self._credential_manager.token is not None
+        has_auth_code = bool(authorization_code or authorization_response)
+
+        # When refresh is disabled the client will neither fetch nor refresh a token on
+        # its own, so the caller must supply a way to obtain one: an existing token, or
+        # an authorization code/response to bootstrap the very first token.
+        if self._token_refresh_disabled and not (has_token or has_auth_code):
+            raise ValueError(
+                "token_refresh_disabled=True requires either an existing token in the "
+                "credential manager or an authorization_code/authorization_response to "
+                "bootstrap one; the client will not refresh tokens on its own."
+            )
 
         self.create_session()
 
-        if self._credential_manager.token is not None:
-            self._credential_manager.update_token(
-                self._session.refresh_token(
-                    token_url=TOKEN_URL,
-                    refresh_token=self._credential_manager.token["refresh_token"],
+        if has_token:
+            if not self._token_refresh_disabled:
+                self._credential_manager.update_token(
+                    self._session.refresh_token(
+                        token_url=TOKEN_URL,
+                        refresh_token=self._credential_manager.token["refresh_token"],
+                    )
                 )
-            )
-        elif authorization_code or authorization_response:
+        elif has_auth_code:
+            # Initial authorization_code -> token exchange is a *fetch*, not a *refresh*,
+            # so it is allowed regardless of token_refresh_disabled.
             self._credential_manager.update_token(
                 self._session.fetch_token(
                     TOKEN_URL,
@@ -210,6 +223,9 @@ class SKYAPIClient:
         except TokenExpiredError:
             # Credential has expired. If this error is showing up here, we need to get a new token externally.
             if self._token_refresh_disabled:
+                # Refresh is somebody else's responsibility. Rebuild the session 
+                # around whatever token the external refresher has since persisted, 
+                # then retry once.
                 self.create_session()
             else:
                 self._credential_manager.update_token(
@@ -218,7 +234,15 @@ class SKYAPIClient:
                         refresh_token=self._credential_manager.token["refresh_token"],
                     )
                 )
-
+            # Retry once with the refreshed / rebuilt session.
+            return self._session.request(
+                method,
+                url,
+                headers=headers,
+                data=data,
+                withhold_token=withhold_token,
+                **kwargs,
+            )
 
 
     @property

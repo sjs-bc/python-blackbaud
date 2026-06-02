@@ -5,9 +5,9 @@ with open("README.md", "r", encoding="utf-8") as f:
 
 setuptools.setup(
     name="blackbaud",
-    version="1.0.0-alpha",
+    version="1.0.0a1",
     author="Ömer Boratav",
-    author_email="oboratav@stjohns.bc.ca",
+    author_email="oboratav@sjs.ca",
     description="A python module to make the SKY API easier to work with",
     long_description=long_description,
     long_description_content_type="text/markdown",
